@@ -3,22 +3,18 @@
 }
 
 
+@foreach (var question in questions)
+{
+    <h4>@question.Title</h4>
+    <br />
+    <p>@question.text</p>
+    <br />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+    @if (question.image != null)
+    {
+        <p>@question.image</p>
+    }
 
-        <tr>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <p style="width:60%">-----</p>
 
-    </tbody>
-</table>
+}
