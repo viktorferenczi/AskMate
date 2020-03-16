@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AskMate
+namespace AskMate.Models
 {
     public class Answer
     {
