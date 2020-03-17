@@ -19,7 +19,6 @@ namespace AskMate.Controllers
         {
             _logger = logger;
             _loader = loader;
-
         }
 
         public IActionResult Index()
@@ -32,14 +31,11 @@ namespace AskMate.Controllers
             return View();
         }
 
-
-
         public IActionResult QuestionList()
         {
 
             return View(_loader.GetQuestions());
         }
-
 
         public IActionResult QuestionAsking()
         {
@@ -52,7 +48,7 @@ namespace AskMate.Controllers
             return View("QuestionList",_loader.GetQuestions());
         }
 
-        public IActionResult Question (int id)
+        public IActionResult Question(int id)
         {
             var questionModel = _loader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == id);

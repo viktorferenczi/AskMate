@@ -32,7 +32,6 @@ namespace AskMate.Domain
                 {
                     return question.ListOfAnswers.Count;
                 }
-                    
             }
             return 0;
         }
@@ -45,7 +44,6 @@ namespace AskMate.Domain
                 {
                     return question;
                 }
-
             }
             return null;
         }
@@ -54,6 +52,5 @@ namespace AskMate.Domain
         {
             return ListOfQuestions;
         }
-
     }
 }
