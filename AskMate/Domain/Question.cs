@@ -7,7 +7,7 @@ namespace AskMate.Domain
 {
     public class Question
     {
-        public Guid ID = new Guid();
+        public int ID { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
         public List<Answer> ListOfAnswers { get; set; }

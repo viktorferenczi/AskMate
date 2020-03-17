@@ -1,5 +1,17 @@
 ﻿@{
     ViewData["Title"] = "QuestionList";
 }
+@model List<AskMate.Domain.Question>
 
+
+    <ul>
+        @foreach (var q in Model)
+        {
+            <li>
+                @q.ID   - @q.Title    - @q.Text
+            </li>
+
+         }
+
+    </ul>
 

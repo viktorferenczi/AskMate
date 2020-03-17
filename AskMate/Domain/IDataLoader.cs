@@ -9,7 +9,7 @@ namespace AskMate.Domain
     {
         List<Question> GetQuestions();
         Question GetQuestion(int questionId);
-        void AddQuestion(string title, string text);
+        int AddQuestion(string title, string text);
         int CountAnswers(int questionId);
     }
 }

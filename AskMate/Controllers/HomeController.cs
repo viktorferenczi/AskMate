@@ -13,10 +13,13 @@ namespace AskMate.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly FakeDataLoader _loader;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, FakeDataLoader loader)
         {
             _logger = logger;
+            _loader = loader;
+
         }
 
         public IActionResult Index()
@@ -29,10 +32,25 @@ namespace AskMate.Controllers
             return View();
         }
 
+
+
         public IActionResult QuestionList()
         {
-            return View();
+
+            return View(_loader.GetQuestions());
         }
+
+
+
+        public IActionResult QuestionAdd([FromForm(Name ="Title")] string title, [FromForm(Name = "Text")] string text)
+        {
+            _loader.AddQuestion(title, text);
+                
+            return View("QuestionList",_loader.GetQuestions());
+
+        }
+
+
 
         public IActionResult QuestionAsking()
         {
