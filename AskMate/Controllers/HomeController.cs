@@ -47,22 +47,17 @@ namespace AskMate.Controllers
             _loader.AddQuestion(title, text);
             return View("QuestionList",_loader.GetQuestions());
         }
-
-       
-        public IActionResult Question(int id)
+     
+        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment)
         {
             var questionModel = _loader.GetQuestions();
-            var question = questionModel.FirstOrDefault(q => q.ID == id);
+           var question = questionModel.FirstOrDefault(q => q.ID == id);
+            if (comment != null)
+            {
+               _loader.AddComment(id, comment);
+            }
             return View(question);
         }
-
-        //public IActionResult Question(int id, [FromForm(Name = "comment")] string comment = "lol")
-        //{
-        //    var questionModel = _loader.GetQuestions();
-        //    var question = questionModel.FirstOrDefault(q => q.ID == id);
-        //    _loader.AddComment(id, comment);
-        //    return View(question);
-        //}
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

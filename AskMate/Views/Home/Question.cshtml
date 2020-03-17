@@ -29,7 +29,7 @@
                 @Html.DisplayFor(model => model.Text)
             </dd>
         </dl>
-        <p>@Model.ListOfAnswers.Count</p>
+    
 
         @if (Model.ListOfAnswers.Count != 0)
         {
@@ -42,7 +42,7 @@
         }
         else
         {
-            <li>There are no comments yet.</li>
+            <p> There are no comments yet. :(</p>
         }
 
         <form method="post">
