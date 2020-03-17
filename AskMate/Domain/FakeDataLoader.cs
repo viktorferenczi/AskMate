@@ -52,5 +52,34 @@ namespace AskMate.Domain
         {
             return ListOfQuestions;
         }
+
+
+
+        public int AddComment(int questionID,string message)
+        {
+            int nextID = 0;
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ListOfAnswers.Count == 0)
+                {
+                    nextID = 1;
+                }
+                else
+                {
+                    nextID = q.ListOfAnswers.Select(q => q.ID).Max() + 1;
+                }
+            }
+
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    q.ListOfAnswers.Add(new Answer(nextID, message));
+                    return nextID;
+                }
+            }
+            throw new Exception("There is no such ID");
+        }
     }
 }

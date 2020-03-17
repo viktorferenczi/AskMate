@@ -6,31 +6,51 @@
 
 
 
-<div>
-    <h4>Question</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Text)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-      
-    </dl>
-</div>
+    <div>
+        <h4>Question</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ID)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Text)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Text)
+            </dd>
+        </dl>
+        <p>@Model.ListOfAnswers.Count</p>
+
+        @if (Model.ListOfAnswers.Count != 0)
+        {
+            <ul>
+                @foreach (var an in Model.ListOfAnswers)
+                {
+                    <li>@an.Text</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <li>There are no comments yet.</li>
+        }
+
+        <form method="post">
+            <input type="text" name="comment" placeholder="enter your comment here" value="" />
+            <input type="submit" value="Comment" class="btn btn-primary" />
+        </form>
+
+    </div>
 <div>
     <a asp-action="QuestionAsking">Ask a question</a>
     <br />

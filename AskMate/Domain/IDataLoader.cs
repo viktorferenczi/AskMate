@@ -11,5 +11,8 @@ namespace AskMate.Domain
         Question GetQuestion(int questionId);
         int AddQuestion(string title, string text);
         int CountAnswers(int questionId);
+
+        int AddComment(int questionId, string message);
+
     }
 }
