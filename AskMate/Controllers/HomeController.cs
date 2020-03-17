@@ -41,25 +41,22 @@ namespace AskMate.Controllers
         }
 
 
-
-        public IActionResult QuestionAdd([FromForm(Name ="Title")] string title, [FromForm(Name = "Text")] string text)
-        {
-            _loader.AddQuestion(title, text);
-                
-            return View("QuestionList",_loader.GetQuestions());
-
-        }
-
-
-
         public IActionResult QuestionAsking()
         {
             return View();
         }
 
-        public IActionResult Question ()
+        public IActionResult AskQuestion([FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text)
         {
-            return View();
+            _loader.AddQuestion(title, text);
+            return View("QuestionList",_loader.GetQuestions());
+        }
+
+        public IActionResult Question (int id)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == id);
+            return View(question);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

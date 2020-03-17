@@ -11,18 +11,17 @@ namespace AskMate.Domain
 
         public int AddQuestion(string title, string text)
         {
-            int nexdId;
+            int nextID;
             if (ListOfQuestions.Count == 0)
             {
-                nexdId = 0;
+                nextID = 1;
             }
             else
             {
-                nexdId = ListOfQuestions.Select(q => q.ID).Max() + 1;
+                nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
             }
-            ListOfQuestions.Add(new Question(title,text));
-            return nexdId;
-
+            ListOfQuestions.Add(new Question(nextID,title, text));
+            return nextID;
         }
 
         public int CountAnswers(int questionId)

@@ -13,8 +13,9 @@ namespace AskMate.Domain
         public List<Answer> ListOfAnswers { get; set; }
         //public string Image { get; set; }
 
-        public Question(string title, string text)
+        public Question(int id, string title, string text)
         {
+            ID = id;
             Title = title;
             Text = text;
         }

@@ -7,20 +7,20 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form action="/Home/QuestionList" method="post">    
+        <form action="/Home/AskQuestion" method="post">    
             <div class="form-group">
                 <label for="Title" class="control-label"></label>
                 <input  name="Title" class="form-control" placeholder="Question title" />
             </div>
             <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
+                <label for="Text" class="control-label"></label>
                 <input name="Text" class="form-control" placeholder="Question" />
             </div>
-            @*<div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" type="file" class="form-control" placeholder="Insert image"/>
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>*@
+           <div class="form-group">
+                <label for="Image" class="control-label"></label>
+                <input for="Image" type="file" class="form-control" placeholder="Insert image"/>
+                <span for="Image" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
