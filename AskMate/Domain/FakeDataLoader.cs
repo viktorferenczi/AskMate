@@ -117,8 +117,15 @@ namespace AskMate.Domain
             {
                 if (q.ID == qid)
                 {
-                    q.Text = text;
-                    q.Title = title;
+                    if (title != q.Title & title != null)
+                    {
+                        q.Title = title;
+                    }
+
+                    if (text != q.Text & text != null)
+                    {
+                        q.Text = text;
+                    }
                 }
             }
         }

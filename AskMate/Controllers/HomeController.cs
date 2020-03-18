@@ -67,8 +67,10 @@ namespace AskMate.Controllers
 
         public IActionResult QuestionEdit(int id, [FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text)
         {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == id);
             _loader.EditQuestion(id, title, text);
-            return View();
+            return View(question);
         }
 
         public IActionResult DeleteAnswer(int id,int qid)
