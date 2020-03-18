@@ -1,0 +1,42 @@
+﻿@model AskMate.Domain.Question
+
+@{
+    ViewData["Title"] = "QuestionEdit";
+}
+
+<h1>QuestionEdit</h1>
+
+<h4>Question</h4>
+@Html.DisplayNameFor(model => model.Text)
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="QuestionEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" name="Title" class="form-control" value="" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                <input asp-for="Text" name="Text" class="form-control" value="d" />
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

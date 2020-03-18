@@ -65,6 +65,12 @@ namespace AskMate.Controllers
             return Redirect("/Home/QuestionList");
         }
 
+        public IActionResult QuestionEdit(int id, [FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text)
+        {
+            _loader.EditQuestion(id, title, text);
+            return View();
+        }
+
         public IActionResult DeleteAnswer(int id,int qid)
         {
             var questionModel = _loader.GetQuestions();

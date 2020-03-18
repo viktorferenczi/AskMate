@@ -110,5 +110,17 @@ namespace AskMate.Domain
             }
            
         }
+
+        public void EditQuestion(int qid,string title, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    q.Text = text;
+                    q.Title = title;
+                }
+            }
+        }
     }
 }
