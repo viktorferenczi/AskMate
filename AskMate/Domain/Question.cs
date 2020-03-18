@@ -21,7 +21,12 @@ namespace AskMate.Domain
             Title = title;
             Text = text;
             ListOfAnswers = new List<Answer>();
-            Image = image;
+
+            if (image != null)
+            {
+                Image = image;
+            }
+           
         }
     }
 }

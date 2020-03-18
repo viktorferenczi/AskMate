@@ -149,5 +149,38 @@ namespace AskMate.Domain
                 }
             }
         }
+
+        public void LikeAnswer(int aid,int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var an in q.ListOfAnswers)
+                    {
+                        if (aid == an.ID)
+                        {
+                            an.UpVotes++;
+                        }
+                    }
+                }
+            }
+        }
+        public void DislikeAnswer(int aid,int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var an in q.ListOfAnswers)
+                    {
+                        if (aid == an.ID)
+                        {
+                            an.DownVotes++;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -30,17 +30,24 @@
             </dd>
         </dl>
 
-        <img src="@Model.Image" alt="User image" />
-        
-            <form action="" method="post">
-                @Model.Like  <div class="like">  @Html.ActionLink(".............", "Like", new { qid = Model.ID }) </div>
-            </form>
-       
-      
-   
-            <form action="" method="post">
-                @Model.Dislike  <div class="dislike"> @Html.ActionLink("..............", "Dislike", new { qid = Model.ID })  </div>
-            </form>
+        @if (Model.Image != null)
+        {
+            <img src="@Model.Image" style="max-height:500px; max-width: 700px" />
+        }
+        else
+        {
+            <p>Image: No image added.</p>
+        }
+
+        <form action="" method="post">
+            @Model.Like  <div class="like">  @Html.ActionLink(".............", "Like", new { qid = Model.ID }) </div>
+        </form>
+
+
+
+        <form action="" method="post">
+            @Model.Dislike  <div class="dislike"> @Html.ActionLink("..............", "Dislike", new { qid = Model.ID })  </div>
+        </form>
 
 
 
@@ -49,14 +56,24 @@
 
         @if (Model.ListOfAnswers.Count != 0)
         {
-            <ul>
-                @foreach (var an in Model.ListOfAnswers)
-                {
-                    <li>@an.Text</li>
-                    @Html.ActionLink("Delete", "DeleteAnswer", new { id = an.ID, qid = Model.ID })
 
-                }
-            </ul>
+            @foreach (var an in Model.ListOfAnswers)
+            {
+                <p>komment:</p>
+                <br />
+                @an.Text
+                @Html.ActionLink("Delete", "DeleteAnswer", new { id = an.ID, qid = Model.ID })
+                <form action="" method="post">
+                    @an.UpVotes  <div class="like">  @Html.ActionLink(".............", "LikeAnswer", new { qid = Model.ID, aid = an.ID }) </div>
+                </form>
+
+
+
+                <form action="" method="post">
+                    @an.DownVotes  <div class="dislike"> @Html.ActionLink("..............", "DislikeAnswer", new { qid = Model.ID, aid = an.ID })  </div>
+                </form>
+            }
+
         }
         else
         {
