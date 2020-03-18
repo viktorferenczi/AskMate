@@ -29,30 +29,32 @@
                 @Html.DisplayFor(model => model.Text)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.UpVotes)
+                @Html.DisplayNameFor(model => model.Like)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.UpVotes)
+                @Html.DisplayFor(model => model.Like)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.DownVotes)
+                @Html.DisplayNameFor(model => model.Dislike)
             </dt>
             <dd class="col-sm-10">
-                 @Html.DisplayFor(model => model.DownVotes)
+                @Html.DisplayFor(model => model.Dislike)
             </dd>
         </dl>
+        
+        <div class="like">
+            
+            <form action="" method="post">
+                @Html.ActionLink("Like", "Like", new { qid = Model.ID })
+            </form>
+        </div>
+        <div class="dislike">
+            <form action="" method="post">
+                @Html.ActionLink("Dislike", "Dislike", new { qid = Model.ID })
+            </form>
+        </div>
 
-        <form action="/" method="post">
-            <button onclick="@Model.asd()">Like</button>
-        </form>
-       
-        <form action="/" method="post">
-            <button value="dislike">Dislike</button>
-        </form>
-       
 
-
-       
 
 
 
@@ -79,10 +81,11 @@
         </form>
 
     </div>
-<div>
-    <a asp-action="QuestionAsking">Ask a question</a>
-    <br />
-    <a asp-action="QuestionList">View already asked questions</a>
-    <br />
-    <a asp-action="Index">Back to Home</a>
-</div>
+        <div>
+            <a asp-action="QuestionAsking">Ask a question</a>
+            <br />
+            <a asp-action="QuestionList">View already asked questions</a>
+            <br />
+            <a asp-action="Index">Back to Home</a>
+        </div>
+

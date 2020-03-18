@@ -12,8 +12,8 @@ namespace AskMate.Domain
         public string Text { get; set; }
         public List<Answer> ListOfAnswers;
         //public string Imageurl { get; set; }
-        public int UpVotes { get; set; }
-        public int DownVotes { get; set; }
+        public int Like { get; set; }
+        public int Dislike { get; set; }
 
         public Question(int id, string title, string text )
         {
@@ -21,11 +21,6 @@ namespace AskMate.Domain
             Title = title;
             Text = text;
             ListOfAnswers = new List<Answer>();
-        }
-
-        public void asd()
-        {
-
         }
     }
 }

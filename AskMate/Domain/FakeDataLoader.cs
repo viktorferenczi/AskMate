@@ -129,5 +129,25 @@ namespace AskMate.Domain
                 }
             }
         }
+        public void Like(int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if(q.ID == qid)
+                {
+                    q.Like++;
+                }
+            }
+        }
+        public void Dislike(int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    q.Dislike++;
+                }
+            }
+        }
     }
 }

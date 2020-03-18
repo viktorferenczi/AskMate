@@ -64,6 +64,13 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
+#like{
+    background-image:url("../like.png")
+}
+#dislike{
+    background-image:url("../dislike.png")
+}
 .footer {
   position: absolute;
   bottom: 0;

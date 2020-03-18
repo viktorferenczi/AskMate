@@ -81,7 +81,22 @@ namespace AskMate.Controllers
             return Redirect($"/Home/Question/{qid}");
         }
 
-       
+        public IActionResult Like(int qid)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+            _loader.Like(qid);
+            return Redirect($"/Home/Question/{qid}");
+        }
+        public IActionResult Dislike(int qid)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+            _loader.Dislike(qid);
+            return Redirect($"/Home/Question/{qid}");
+        }
+
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
