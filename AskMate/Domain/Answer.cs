@@ -12,11 +12,13 @@ namespace AskMate.Domain
         public string Imageurl { get; set; }
         public int UpVotes { get; set; }
         public int DownVotes { get; set; }
+        public int QaID { get; set; }
 
-        public Answer(int id, string text)
+        public Answer(int id, string text, int QaID)
         {
             ID = id;
             Text = text;
+            this.QaID = QaID;
         }
     }
 

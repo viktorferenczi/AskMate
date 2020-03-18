@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,7 +76,7 @@ namespace AskMate.Domain
             {
                 if (q.ID.Equals(questionID))
                 {
-                    q.ListOfAnswers.Add(new Answer(nextID, message));
+                    q.ListOfAnswers.Add(new Answer(nextID, message,questionID));
                     return nextID;
                 }
             }
@@ -179,6 +180,37 @@ namespace AskMate.Domain
                             an.DownVotes++;
                         }
                     }
+                }
+            }
+        }
+
+        public void WriteQuestionToCSV()
+        {
+            string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
+            using (var w = new StreamWriter(questionDatabase))
+            {
+                for (int i = 0; i < ListOfQuestions.Count; i++)
+                {
+                    var q = ListOfQuestions[i];
+                    w.WriteLine($"{q.ID},{q.Title},{q.Text},{q.Like},{q.Dislike},{q.Image}");
+                    w.Flush();
+                }
+            }
+        }
+        public void WriteAnswerToCSV()
+        {
+            string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
+            using (var w = new StreamWriter(questionDatabase))
+            {
+                foreach (var q in ListOfQuestions)
+                {
+                    w.WriteLine(q.ID);
+                    foreach (var a in q.ListOfAnswers)
+                    {
+                        w.WriteLine($"{a.ID},{a.Text},{a.UpVotes},{a.DownVotes},{a.Imageurl}");
+                        w.Flush();
+                    }
+
                 }
             }
         }
