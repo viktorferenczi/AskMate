@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AskMate.Domain
@@ -215,6 +218,29 @@ namespace AskMate.Domain
                     }
 
                 }
+            }
+        }
+        public void LoadQuestion()
+        {
+            string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
+            string[] lines = System.IO.File.ReadAllLines(questionDatabase);
+            Regex CSVParser = new Regex(",");
+            foreach (var row in lines)
+            {
+                String[] Fields = CSVParser.Split(row);
+                for (int i = 0; i < Fields.Length; i++)
+                {
+                    Fields[i] = Fields[i].TrimStart(' ', '"');
+                    Fields[i] = Fields[i].TrimEnd('"');
+                }
+                Question q = new Question();
+                q.ID = int.Parse(Fields[0]);
+                q.Title = Fields[1];
+                q.Text = Fields[2];
+                q.Like = int.Parse(Fields[3]);
+                q.Dislike = int.Parse(Fields[4]);
+                q.Image = Fields[5];
+                ListOfQuestions.Add(q);
             }
         }
     }

@@ -30,5 +30,9 @@ namespace AskMate.Domain
             }
            
         }
+        public Question()
+        {
+
+        }
     }
 }
