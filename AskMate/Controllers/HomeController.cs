@@ -59,6 +59,20 @@ namespace AskMate.Controllers
             return View(question);
         }
 
+        public IActionResult Delete(int id)
+        {
+            _loader.DeleteQuestion(id);
+            return Redirect("/Home/QuestionList");
+        }
+
+        public IActionResult DeleteAnswer(int id,int qid)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+            _loader.DeleteComment(id);
+            return Redirect($"/Home/Question/{qid}");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

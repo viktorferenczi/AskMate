@@ -16,6 +16,9 @@
         <li>
             ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text
             @Html.ActionLink("View", "Question", new { id = q.ID })
+            @Html.ActionLink("Delete", "Delete", new { id = q.ID })
+
+
         </li>
         }
     </ul>

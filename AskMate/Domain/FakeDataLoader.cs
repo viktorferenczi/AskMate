@@ -81,5 +81,34 @@ namespace AskMate.Domain
             }
             throw new Exception("There is no such ID");
         }
+
+        public void DeleteQuestion(int ID)
+        {
+            for (int i = 0; i < ListOfQuestions.Count; i++)
+            {
+                if (ListOfQuestions[i].ID == ID)
+                {
+                    ListOfQuestions.Remove(ListOfQuestions[i]);
+                }
+            }
+           
+        }
+
+        public void DeleteComment(int ID)
+        {
+
+            foreach (var q in ListOfQuestions)
+            {
+                foreach (var answer in q.ListOfAnswers)
+                {
+                    if (answer.ID == ID)
+                    {
+                        q.ListOfAnswers.Remove(answer);
+                        return;
+                    }
+                }
+            }
+           
+        }
     }
 }

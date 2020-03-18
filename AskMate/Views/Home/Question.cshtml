@@ -33,12 +33,14 @@
 
         @if (Model.ListOfAnswers.Count != 0)
         {
-            <ul>
-                @foreach (var an in Model.ListOfAnswers)
-                {
-                    <li>@an.Text</li>
-                }
-            </ul>
+    <ul>
+        @foreach (var an in Model.ListOfAnswers)
+        {
+            <li>@an.Text</li>
+            @Html.ActionLink("Delete", "DeleteAnswer", new { id = an.ID, qid = Model.ID })
+
+        }
+    </ul>
         }
         else
         {
