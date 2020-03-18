@@ -28,19 +28,44 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Text)
             </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UpVotes)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UpVotes)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DownVotes)
+            </dt>
+            <dd class="col-sm-10">
+                 @Html.DisplayFor(model => model.DownVotes)
+            </dd>
         </dl>
-    
+
+        <form action="/" method="post">
+            <button onclick="@Model.asd()">Like</button>
+        </form>
+       
+        <form action="/" method="post">
+            <button value="dislike">Dislike</button>
+        </form>
+       
+
+
+       
+
+
 
         @if (Model.ListOfAnswers.Count != 0)
         {
-    <ul>
-        @foreach (var an in Model.ListOfAnswers)
-        {
-            <li>@an.Text</li>
-            @Html.ActionLink("Delete", "DeleteAnswer", new { id = an.ID, qid = Model.ID })
+            <ul>
+                @foreach (var an in Model.ListOfAnswers)
+                {
+                    <li>@an.Text</li>
+                    @Html.ActionLink("Delete", "DeleteAnswer", new { id = an.ID, qid = Model.ID })
 
-        }
-    </ul>
+                }
+            </ul>
         }
         else
         {

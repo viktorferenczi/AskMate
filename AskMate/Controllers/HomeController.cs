@@ -48,7 +48,7 @@ namespace AskMate.Controllers
             return View("QuestionList",_loader.GetQuestions());
         }
      
-        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment)
+        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment )
         {
             var questionModel = _loader.GetQuestions();
            var question = questionModel.FirstOrDefault(q => q.ID == id);
@@ -80,6 +80,8 @@ namespace AskMate.Controllers
             _loader.DeleteComment(id);
             return Redirect($"/Home/Question/{qid}");
         }
+
+       
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

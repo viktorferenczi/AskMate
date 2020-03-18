@@ -22,5 +22,10 @@ namespace AskMate.Domain
             Text = text;
             ListOfAnswers = new List<Answer>();
         }
+
+        public void asd()
+        {
+
+        }
     }
 }
