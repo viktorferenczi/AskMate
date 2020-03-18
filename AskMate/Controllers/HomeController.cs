@@ -42,9 +42,9 @@ namespace AskMate.Controllers
             return View();
         }
 
-        public IActionResult AskQuestion([FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text)
+        public IActionResult AskQuestion([FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text, [FromForm(Name = "Image")] string image)
         {
-            _loader.AddQuestion(title, text);
+            _loader.AddQuestion(title, text, image);
             return View("QuestionList",_loader.GetQuestions());
         }
      

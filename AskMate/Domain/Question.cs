@@ -11,16 +11,17 @@ namespace AskMate.Domain
         public string Title { get; set; }
         public string Text { get; set; }
         public List<Answer> ListOfAnswers;
-        //public string Imageurl { get; set; }
+        public string Image { get; set; }
         public int Like { get; set; }
         public int Dislike { get; set; }
 
-        public Question(int id, string title, string text )
+        public Question(int id, string title, string text, string image )
         {
             ID = id;
             Title = title;
             Text = text;
             ListOfAnswers = new List<Answer>();
+            Image = image;
         }
     }
 }

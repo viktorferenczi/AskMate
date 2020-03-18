@@ -28,31 +28,20 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Text)
             </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Like)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Like)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Dislike)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Dislike)
-            </dd>
         </dl>
+
+        <img src="@Model.Image" alt="User image" />
         
-        <div class="like">
-            
             <form action="" method="post">
-                @Html.ActionLink("Like", "Like", new { qid = Model.ID })
+                @Model.Like  <div class="like">  @Html.ActionLink(".............", "Like", new { qid = Model.ID }) </div>
             </form>
-        </div>
-        <div class="dislike">
+       
+      
+   
             <form action="" method="post">
-                @Html.ActionLink("Dislike", "Dislike", new { qid = Model.ID })
+                @Model.Dislike  <div class="dislike"> @Html.ActionLink("..............", "Dislike", new { qid = Model.ID })  </div>
             </form>
-        </div>
+
 
 
 

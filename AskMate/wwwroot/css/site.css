@@ -86,6 +86,10 @@ body {
     overflow: hidden;
     outline: none;
     background-size: 20px;
+    width:2%;
+    text-underline-position:alphabetic;
+    
+    
 }
 .dislike {
     background-image: url("../dislike.png");
@@ -96,4 +100,9 @@ body {
     overflow: hidden;
     outline: none;
     background-size: 20px;
+    width: 2%;
+}
+
+.form-dislike{
+    margin
 }

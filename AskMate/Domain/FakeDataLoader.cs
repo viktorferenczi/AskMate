@@ -9,7 +9,7 @@ namespace AskMate.Domain
     {
         private List<Question> ListOfQuestions = new List<Question>();
 
-        public int AddQuestion(string title, string text)
+        public int AddQuestion(string title, string text, string image)
         {
             int nextID;
             if (ListOfQuestions.Count == 0)
@@ -20,7 +20,7 @@ namespace AskMate.Domain
             {
                 nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
             }
-            ListOfQuestions.Add(new Question(nextID,title, text));
+            ListOfQuestions.Add(new Question(nextID,title, text, image));
             return nextID;
         }
 

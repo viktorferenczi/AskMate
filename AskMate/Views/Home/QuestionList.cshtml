@@ -14,13 +14,13 @@
         @foreach (var q in Model)
         {
         <li>
-            ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text
+            ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text   |    Image: <img src="@q.Image" alt="User image" height="80" width="80"/>
             @Html.ActionLink("View", "Question", new { id = q.ID })
             @Html.ActionLink("Delete", "Delete", new { id = q.ID })
             @Html.ActionLink("Edit", "QuestionEdit", new { id = q.ID })
-           
 
-            
+
+
 
 
         </li>
