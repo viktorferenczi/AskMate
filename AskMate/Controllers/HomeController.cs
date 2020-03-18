@@ -45,6 +45,8 @@ namespace AskMate.Controllers
         public IActionResult AskQuestion([FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text, [FromForm(Name = "Image")] string image)
         {
             _loader.AddQuestion(title, text, image);
+            _loader.WriteQuestionToCSV();
+            _loader.WriteAnswerToCSV();
             return View("QuestionList",_loader.GetQuestions());
         }
      

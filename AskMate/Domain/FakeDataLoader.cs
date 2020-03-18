@@ -197,6 +197,7 @@ namespace AskMate.Domain
                 }
             }
         }
+
         public void WriteAnswerToCSV()
         {
             string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
