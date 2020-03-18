@@ -10,16 +10,32 @@
     <p>There are no question yet. :(</p>
 
 }
-    <ul>
-        @foreach (var q in Model)
-        {
+Sort: Title
+@Html.ActionLink("↑", "SortingByTitleDesc", new { Model })
+@Html.ActionLink("↓", "SortingByTitleAsc", new { Model })
+
+Like
+@Html.ActionLink("↑", "SortingByLikesDesc", new { Model })
+@Html.ActionLink("↓", "SortingByLikesAsc", new { Model })
+
+Comment
+@Html.ActionLink("↑", "SortingByCommentsDesc", new { Model })
+@Html.ActionLink("↓", "SortingByCommentsAsc", new { Model })
+
+
+<ul>
+
+    @foreach (var q in Model)
+    {
         <li>
             ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text
             @Html.ActionLink("View", "Question", new { id = q.ID })
             @Html.ActionLink("Delete", "Delete", new { id = q.ID })
             @Html.ActionLink("Edit", "QuestionEdit", new { id = q.ID })
 
+
+
         </li>
-        }
-    </ul>
+    }
+</ul>
 

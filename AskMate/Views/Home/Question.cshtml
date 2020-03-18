@@ -62,6 +62,16 @@
                 <p>komment:</p>
                 <br />
                 @an.Text
+                <br />
+                <br />
+
+                @if (an.Image != null)
+                {
+                    <img src="@an.Image" />
+                }
+              
+
+                <br />
                 @Html.ActionLink("Delete", "DeleteAnswer", new { id = an.ID, qid = Model.ID })
                 <form action="" method="post">
                     @an.UpVotes  <div class="like">  @Html.ActionLink(".............", "LikeAnswer", new { qid = Model.ID, aid = an.ID }) </div>
@@ -72,6 +82,8 @@
                 <form action="" method="post">
                     @an.DownVotes  <div class="dislike"> @Html.ActionLink("..............", "DislikeAnswer", new { qid = Model.ID, aid = an.ID })  </div>
                 </form>
+
+                <br />
             }
 
         }
@@ -82,10 +94,10 @@
 
 
         <form method="post">
-            <input type="text" name="comment" placeholder="enter your comment here" value="" />
+            <input type="text" name="comment" placeholder="Enter your comment here" value="" />
+            <input type="text" name="image" placeholder="Optional: Insert image url" value="" />
             <input type="submit" value="Comment" class="btn btn-primary" />
         </form>
-
     </div>
         <div>
             <a asp-action="QuestionAsking">Ask a question</a>

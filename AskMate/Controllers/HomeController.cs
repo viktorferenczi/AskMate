@@ -23,40 +23,41 @@ namespace AskMate.Controllers
 
         public IActionResult Index()
         {
+ 
             return View();
         }
 
         public IActionResult Privacy()
         {
+
             return View();
         }
 
         public IActionResult QuestionList()
         {
-
+  
             return View(_loader.GetQuestions());
         }
 
         public IActionResult QuestionAsking()
         {
+
             return View();
         }
 
         public IActionResult AskQuestion([FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text, [FromForm(Name = "Image")] string image)
         {
             _loader.AddQuestion(title, text, image);
-            _loader.WriteQuestionToCSV();
-            _loader.WriteAnswerToCSV();
             return View("QuestionList",_loader.GetQuestions());
         }
      
-        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment )
+        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment, string image )
         {
             var questionModel = _loader.GetQuestions();
            var question = questionModel.FirstOrDefault(q => q.ID == id);
             if (comment != null)
             {
-               _loader.AddComment(id, comment);
+               _loader.AddComment(id, comment,image);
             }
             return View(question);
         }
@@ -121,6 +122,53 @@ namespace AskMate.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public ActionResult SortingByTitleDesc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.Title).ToList();
+            return View("QuestionList", List);
+        }
+
+        public ActionResult SortingByLikesDesc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.Like).ToList();
+            
+            return View("QuestionList", List);
+        }
+
+        public ActionResult SortingByCommentsDesc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.NumOfMessages).ToList();
+           
+            return View("QuestionList", List);
+        }
+        public ActionResult SortingByTitleAsc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.Title).ToList();
+            List.Reverse();
+            return View("QuestionList", List);
+        }
+
+        public ActionResult SortingByLikesAsc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.Like).ToList();
+            List.Reverse();
+            return View("QuestionList", List);
+        }
+
+        public ActionResult SortingByCommentsAsc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.NumOfMessages).ToList();
+            List.Reverse();
+            return View("QuestionList", List);
         }
     }
 }

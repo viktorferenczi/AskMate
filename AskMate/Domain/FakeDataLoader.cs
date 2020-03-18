@@ -56,7 +56,7 @@ namespace AskMate.Domain
 
 
 
-        public int AddComment(int questionID,string message)
+        public int AddComment(int questionID,string message,string image)
         {
             int nextID = 0;
             foreach (var q in ListOfQuestions)
@@ -76,7 +76,8 @@ namespace AskMate.Domain
             {
                 if (q.ID.Equals(questionID))
                 {
-                    q.ListOfAnswers.Add(new Answer(nextID, message,questionID));
+                    q.ListOfAnswers.Add(new Answer(nextID, message,questionID,image));
+                    q.NumOfMessages++;
                     return nextID;
                 }
             }
@@ -105,6 +106,7 @@ namespace AskMate.Domain
                     if (answer.ID == ID)
                     {
                         q.ListOfAnswers.Remove(answer);
+                        q.NumOfMessages--;
                         return;
                     }
                 }
@@ -208,7 +210,7 @@ namespace AskMate.Domain
                     w.WriteLine(q.ID);
                     foreach (var a in q.ListOfAnswers)
                     {
-                        w.WriteLine($"{a.ID},{a.Text},{a.UpVotes},{a.DownVotes},{a.Imageurl}");
+                        w.WriteLine($"{a.ID},{a.Text},{a.UpVotes},{a.DownVotes},{a.Image}");
                         w.Flush();
                     }
 
