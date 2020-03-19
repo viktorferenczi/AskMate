@@ -56,6 +56,7 @@ namespace AskMate.Controllers
         {
             var questionModel = _loader.GetQuestions();
            var question = questionModel.FirstOrDefault(q => q.ID == id);
+            question.NumOfViews++;
             if (comment != null)
             {
                _loader.AddComment(id, comment,image);
@@ -171,5 +172,35 @@ namespace AskMate.Controllers
             List.Reverse();
             return View("QuestionList", List);
         }
+
+        public ActionResult SortingByDateDesc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.PostedDate).ToList();
+            return View("QuestionList", List);
+        }
+
+        public ActionResult SortingByDateAsc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.PostedDate).ToList();
+            List.Reverse();
+            return View("QuestionList", List);
+        }
+        public ActionResult SortingByViewsDesc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.NumOfViews).ToList();
+            return View("QuestionList", List);
+        }
+
+        public ActionResult SortingByViewsAsc()
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.NumOfViews).ToList();
+            List.Reverse();
+            return View("QuestionList", List);
+        }
+
     }
 }
