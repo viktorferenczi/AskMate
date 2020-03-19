@@ -88,8 +88,6 @@ body {
     background-size: 20px;
     width:2%;
     text-underline-position:alphabetic;
-    
-    
 }
 .dislike {
     background-image: url("../dislike.png");
@@ -104,5 +102,5 @@ body {
 }
 
 .form-dislike{
-    margin
+   
 }

@@ -55,7 +55,7 @@ namespace AskMate.Controllers
         public IActionResult Question(int id, [FromForm(Name = "comment")] string comment, string image )
         {
             var questionModel = _loader.GetQuestions();
-           var question = questionModel.FirstOrDefault(q => q.ID == id);
+            var question = questionModel.FirstOrDefault(q => q.ID == id);
             if (comment != null)
             {
                _loader.AddComment(id, comment,image);

@@ -14,10 +14,11 @@ namespace AskMate.Domain
         public string Image { get; set; }
         public int Like { get; set; }
         public int Dislike { get; set; }
+
         public int NumOfMessages { get; set; }
         public int NumOfViews { get; set; }
 
-        public Question(int id, string title, string text, string image )
+        public Question(int id, string title, string text, string image)
         {
             ID = id;
             Title = title;
@@ -28,7 +29,19 @@ namespace AskMate.Domain
             {
                 Image = image;
             }
-           
+        }
+        public Question(int id, string title, string text, string image, int like, int dislike)
+        {
+            ID = id;
+            Title = title;
+            Text = text;
+            ListOfAnswers = new List<Answer>();
+            if (image != null)
+            {
+                Image = image;
+            }
+            Like = like;
+            Dislike = dislike;
         }
         public Question()
         {

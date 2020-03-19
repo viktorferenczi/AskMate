@@ -13,6 +13,9 @@
 Sort: Title
 @Html.ActionLink("↑", "SortingByTitleDesc", new { Model })
 @Html.ActionLink("↓", "SortingByTitleAsc", new { Model })
+<a href='@Url.Action("SortingByTitleDesc", "Home")'>
+    <img src='@Url.Content("~/like.png")' />
+</a>
 
 Like
 @Html.ActionLink("↑", "SortingByLikesDesc", new { Model })
@@ -28,7 +31,7 @@ Comment
     @foreach (var q in Model)
     {
         <li>
-            ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text
+            ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text | @q.NumOfViews  |  @q.NumOfMessages
             @Html.ActionLink("View", "Question", new { id = q.ID })
             @Html.ActionLink("Delete", "Delete", new { id = q.ID })
             @Html.ActionLink("Edit", "QuestionEdit", new { id = q.ID })
