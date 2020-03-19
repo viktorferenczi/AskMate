@@ -203,6 +203,6 @@ namespace AskMate.Controllers
             List.Reverse();
             return View("QuestionList", List);
         }
-    }
 
+    }
 }
