@@ -24,6 +24,10 @@ namespace AskMate.Domain
                 Image = image;
             }
         }
+        public Answer()
+        {
+
+        }
     }
 
     

@@ -19,23 +19,24 @@ namespace AskMate.Controllers
         {
             _logger = logger;
             _loader = loader;
+            
         }
+    
 
         public IActionResult Index()
         {
- 
+           
             return View();
         }
 
         public IActionResult Privacy()
         {
-
+            
             return View();
         }
 
         public IActionResult QuestionList()
         {
-  
             return View(_loader.GetQuestions());
         }
 

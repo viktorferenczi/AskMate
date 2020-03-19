@@ -9,10 +9,15 @@ using System.Threading.Tasks;
 
 namespace AskMate.Domain
 {
-    public class FakeDataLoader : IDataLoader
+    public sealed class FakeDataLoader : IDataLoader
     {
         private List<Question> ListOfQuestions = new List<Question>();
 
+        public FakeDataLoader()
+        {
+            LoadQuestion();
+        }
+        
         public int AddQuestion(string title, string text, string image)
         {
             int nextID;
@@ -28,6 +33,7 @@ namespace AskMate.Domain
             return nextID;
         }
 
+
         public int CountAnswers(int questionId)
         {
             foreach (var question in ListOfQuestions)
@@ -42,6 +48,7 @@ namespace AskMate.Domain
 
         public Question GetQuestion(int questionId)
         {
+
             foreach (var question in ListOfQuestions)
             {
                 if (question.ID.Equals(questionId))
@@ -220,10 +227,12 @@ namespace AskMate.Domain
                 }
             }
         }
-        public void LoadQuestion()
+        public List<Question> LoadQuestion()
         {
             string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
+            string answerDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
             string[] lines = System.IO.File.ReadAllLines(questionDatabase);
+            string[] anslines = System.IO.File.ReadAllLines(questionDatabase);
             Regex CSVParser = new Regex(",");
             foreach (var row in lines)
             {
@@ -239,9 +248,35 @@ namespace AskMate.Domain
                 q.Text = Fields[2];
                 q.Like = int.Parse(Fields[3]);
                 q.Dislike = int.Parse(Fields[4]);
-                q.Image = Fields[5];
+                if(Fields[5].Length > 0)
+                {
+                    q.Image = Fields[5];
+                }
+                else
+                {
+                    q.Image = null;
+                }
+
+                foreach (var ansrow in anslines)
+                {
+                    String[] ansFields = CSVParser.Split(ansrow);
+                    for (int i = 0; i < Fields.Length; i++)
+                    {
+                        Fields[i] = Fields[i].TrimStart(' ', '"');
+                        Fields[i] = Fields[i].TrimEnd('"');
+                    }
+                    Answer ans = new Answer();
+                    //public int ID { get; set; }
+                    //public string Text { get; set; }
+                    //public string Image { get; set; }
+                    //public int UpVotes { get; set; }
+                    //public int DownVotes { get; set; }
+                    //public int QaID { get; set; }
+                    
+                }
                 ListOfQuestions.Add(q);
             }
+            return ListOfQuestions;
         }
     }
 }
