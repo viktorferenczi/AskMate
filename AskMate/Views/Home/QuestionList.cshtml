@@ -5,37 +5,163 @@
 
 
 
-@if (Model.Count == 0)
+@if (Model.Count != 0)
 {
-    <p>There are no question yet. :(</p>
 
+    <div class="SortButtons" style="background-color:#c6e2ff; border-radius:7px; padding-left:20px; height:35px; padding-top:4px; font-size:17px; margin-bottom:20px">
+        <div style="float:left; margin-left:30px; margin-top:1px; padding-left:5px;padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a href='@Url.Action("SortingByTitleDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByTitleAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Title
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByLikesDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Like
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByCommentsAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Comment
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByDateDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByDateAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Date
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByViewsDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByViewsAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Views
+        </div>
+    </div>
+
+
+    <ul style="list-style-type: none ; margin-right:30px">
+
+        @foreach (var q in Model)
+        {
+            <div style="background-color:#e0efff; margin-top:10px; border-radius:7px;padding-left:5px;padding-right:5px;">
+                <li>
+                    <h2 style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px">@q.Title</h2>
+                    <h3 style="font-size:20px">@q.Text</h3>
+                    <div style="margin-left:93%; padding-bottom:5px ">
+                        <a style="margin-left:5px;" href='@Url.Action("Question", new { id = q.ID })'>
+                            <img style="height:18px; width:15px; " src='@Url.Content("~/view.png")' />
+                        </a>
+                        <a style="margin-left:5px;" href='@Url.Action("QuestionEdit", new { id = q.ID })'>
+                            <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
+                        </a>
+                        <a style="margin-left:5px;" href='@Url.Action("Delete", new { id = q.ID })'>
+                            <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
+                        </a>
+                    </div>
+                </li>
+            </div>
+        }
+    </ul>
 }
-Sort: Title
-@Html.ActionLink("↑", "SortingByTitleDesc", new { Model })
-@Html.ActionLink("↓", "SortingByTitleAsc", new { Model })
-
-Like
-@Html.ActionLink("↑", "SortingByLikesDesc", new { Model })
-@Html.ActionLink("↓", "SortingByLikesAsc", new { Model })
-
-Comment
-@Html.ActionLink("↑", "SortingByCommentsDesc", new { Model })
-@Html.ActionLink("↓", "SortingByCommentsAsc", new { Model })
-
-
-<ul>
-
-    @foreach (var q in Model)
-    {
-        <li>
-            ID: @q.ID   |  Title: @q.Title   |  Question: @q.Text
-            @Html.ActionLink("View", "Question", new { id = q.ID })
-            @Html.ActionLink("Delete", "Delete", new { id = q.ID })
-            @Html.ActionLink("Edit", "QuestionEdit", new { id = q.ID })
-
-
-
-        </li>
-    }
+else
+{
+    <div>
+    <p style="font-size:150px; margin-left:70px;float:left "> :(<p style="padding-top:170px; margin-left:11px">There are no questions yet...     </p></p>
+    </div>
+    <div style="float:none; margin-top:45%">
+        <a asp-action="QuestionAsking">Ask a question</a> | 
+        <a asp-action="Index">Back to Home</a>
+    </div>
+}
+<ul class="circles" style="pointer-events:none;  ">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
 </ul>
 
+
+    

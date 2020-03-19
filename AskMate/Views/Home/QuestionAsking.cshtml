@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "QuestionAsking";
 }
-<h4>Question</h4>
+<h4>Your Question</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,7 +14,7 @@
             </div>
             <div class="form-group">
                 <label for="Text" class="control-label"></label>
-                <input name="Text" class="form-control" placeholder="Question" required />
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="Text" placeholder="Your question goes here.." style="width:319%; min-height:370px" required></textarea>
             </div>
            <div class="form-group">
                 <label for="Image" class="control-label"></label>
@@ -22,17 +22,82 @@
                 <span for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to Home</a>
-    <br />
+    <a asp-action="Index">Back to Home</a> | 
     <a asp-action="QuestionList">View already asked questions</a>
 </div>
+<ul class="circles" style="pointer-events:none;  ">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

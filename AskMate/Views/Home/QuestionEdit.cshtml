@@ -4,45 +4,101 @@
     ViewData["Title"] = "QuestionEdit";
 }
 
-<h1>QuestionEdit</h1>
-
-<h4>Question:</h4>
-@Model.Title
-<br /> <br />
-@Model.Text
+<h4>Edit your question</h4>
 <hr />
-
 <div class="row">
     <div class="col-md-4">
         <form asp-action="QuestionEdit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" name="Title" class="form-control" value="@Model.Title" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" name="Text" class="form-control" value="@Model.Text" />
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="Text" placeholder="Your question goes here.." style="width:319%; min-height:370px" required>@Model.Text</textarea>
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
 
-            <div class="form-group">               
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="QuestionAsking">Ask a question</a>
-    <br />
-    <a asp-action="QuestionList">View already asked questions</a>
-    <br />
-    <a asp-action="Index">Back to Home</a>
+<div style="margin-top:110px">
+    <a asp-action="QuestionAsking">Add a question</a> | 
+    <a asp-action="QuestionList">View questions</a> | 
+    <a asp-action="Index">Back to Home</a> 
 </div>
+<ul class="circles" style="pointer-events:none;  ">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

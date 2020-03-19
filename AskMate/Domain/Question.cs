@@ -17,6 +17,8 @@ namespace AskMate.Domain
         public int NumOfMessages { get; set; }
         public int NumOfViews { get; set; }
 
+        public DateTime PostedDate{ get; set; }
+
         public Question(int id, string title, string text, string image )
         {
             ID = id;

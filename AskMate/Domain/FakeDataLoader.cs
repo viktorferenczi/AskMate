@@ -77,7 +77,7 @@ namespace AskMate.Domain
                 }
                 else
                 {
-                    nextID = q.ListOfAnswers.Select(q => q.ID).Max() + 1;
+                    nextID = q.ListOfAnswers.Select(aq => q.ID).Max() + 1;
                 }
             }
 
