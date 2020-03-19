@@ -12,8 +12,9 @@ namespace AskMate.Domain
         public string Image { get; set; }
         public int UpVotes { get; set; }
         public int DownVotes { get; set; }
+        public DateTime PostedDate { get; set; }
 
-        public Answer(int id, string text, int QaID, string image)
+        public Answer(int id, string text, int QaID, string image, DateTime postedDate)
         {
             ID = id;
             Text = text;
@@ -21,6 +22,7 @@ namespace AskMate.Domain
             {
                 Image = image;
             }
+            PostedDate = postedDate;
         }
         public Answer(int id, string text, string image, int upVotes, int downVotes)
         {

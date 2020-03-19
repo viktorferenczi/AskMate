@@ -92,7 +92,7 @@ namespace AskMate.Domain
             {
                 if (q.ID.Equals(questionID))
                 {
-                    q.ListOfAnswers.Add(new Answer(nextID, message,questionID,image));
+                    q.ListOfAnswers.Add(new Answer(nextID, message,questionID,image,DateTime.Now));
                     q.NumOfMessages++;
                     WriteQuestionToCSV();
                     WriteAnswerToCSV();
@@ -251,7 +251,7 @@ namespace AskMate.Domain
                         {
                             a.Image = "";
                         }
-                        w.WriteLine($"{q.ID},{a.ID},{a.Text},{a.Image},{a.UpVotes},{a.DownVotes}");
+                        w.WriteLine($"{q.ID},{a.ID},{a.Text},{a.Image},{a.UpVotes},{a.DownVotes},{a.PostedDate}");
                         w.Flush();
                     }
 
@@ -262,8 +262,8 @@ namespace AskMate.Domain
         {
             string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
             string answerDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
-            string[] lines = System.IO.File.ReadAllLines(questionDatabase);
-            string[] anslines = System.IO.File.ReadAllLines(answerDatabase);
+            string[] lines = File.ReadAllLines(questionDatabase);
+            string[] anslines = File.ReadAllLines(answerDatabase);
             Regex CSVParser = new Regex(",");
             Regex AnsParser = new Regex(",");
             int rowcount = 0;
@@ -291,7 +291,6 @@ namespace AskMate.Domain
                
                 q.Like = int.Parse(Fields[4]);
                 q.Dislike = int.Parse(Fields[5]);
-                //int numOfMessages, int numOfViews, DateTime postedDate)
                 q.NumOfMessages = int.Parse(Fields[6]);
                 q.NumOfViews = int.Parse(Fields[7]);
                 q.PostedDate = DateTime.Parse(Fields[8]);
@@ -308,8 +307,6 @@ namespace AskMate.Domain
                     }
                     if (int.Parse(ansFields[0]) == q.ID)
                     {
-                        //(int id, string text, string image, int upVotes, int downVotes)
-                        //ans(int.Parse(ansFields[1]), ansFields[2], ansFields[3], int.Parse(ansFields[4]), int.Parse(ansFields[5]));
                         ans.ID = int.Parse(ansFields[1]);
                         ans.Text = ansFields[2];
                         if (Fields[3] != null)
@@ -322,6 +319,7 @@ namespace AskMate.Domain
                         }
                         ans.UpVotes = int.Parse(ansFields[4]);
                         ans.DownVotes = int.Parse(ansFields[5]);
+                        ans.PostedDate = DateTime.Parse(ansFields[6]);
                         ListOfQuestions[rowcount].ListOfAnswers.Add(ans);
                     }
                 }
