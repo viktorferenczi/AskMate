@@ -29,7 +29,7 @@ namespace AskMate.Domain
             {
                 nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
             }
-            ListOfQuestions.Add(new Question(nextID,title, text, image));
+            ListOfQuestions.Add(new Question(nextID,title, text, image, DateTime.Now));
             WriteQuestionToCSV();
             WriteAnswerToCSV();
             return nextID;
@@ -231,7 +231,8 @@ namespace AskMate.Domain
                     {
                         q.Image = "";
                     }
-                    w.WriteLine($"{q.ID},{q.Title},{q.Text},{q.Image},{q.Like},{q.Dislike}");
+                   
+                    w.WriteLine($"{q.ID},{q.Title},{q.Text},{q.Image},{q.Like},{q.Dislike},{q.NumOfMessages},{q.NumOfViews},{q.PostedDate}");
                     w.Flush();
                 }
             }
@@ -276,7 +277,6 @@ namespace AskMate.Domain
                     Fields[i] = Fields[i].TrimStart(' ', '"');
                     Fields[i] = Fields[i].TrimEnd('"');
                 }
-                //public Question(int id, string title, string text, string image, int like, int dislike)
                 q.ID = int.Parse(Fields[0]);
                 q.Title = Fields[1];
                 q.Text = Fields[2];
@@ -291,6 +291,10 @@ namespace AskMate.Domain
                
                 q.Like = int.Parse(Fields[4]);
                 q.Dislike = int.Parse(Fields[5]);
+                //int numOfMessages, int numOfViews, DateTime postedDate)
+                q.NumOfMessages = int.Parse(Fields[6]);
+                q.NumOfViews = int.Parse(Fields[7]);
+                q.PostedDate = DateTime.Parse(Fields[8]);
                 ListOfQuestions.Add(q);
                 ListOfQuestions[rowcount].ListOfAnswers = new List<Answer>();
                 foreach (var ansrow in anslines)
