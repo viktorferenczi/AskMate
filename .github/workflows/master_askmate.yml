@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'askmate'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_c56b981b5c6340228e1c4f7c50488f91 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e89545310d9c4f94901d777ed8f31e3f }}
         package: ${{env.DOTNET_ROOT}}/myapp 
