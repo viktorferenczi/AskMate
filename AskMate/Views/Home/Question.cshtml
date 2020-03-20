@@ -37,7 +37,7 @@
             <div style="font-size:14px; background-color:#e0efff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px;margin-right:430px">
                 <h2 style="font-size:24px; float:none; padding-top:10px">@an.Text</h2>
             </div>
-            <a style="margin-left:0px; margin-left:90%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { id = an.ID, qid = Model.ID  })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { id = an.ID, qid = Model.ID  })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new {  id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px; " src='@Url.Content("~/delete.png")' /></a>
+            <a style="margin-left:0px; margin-left:90%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { aid = an.ID, qid = Model.ID  })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { aid = an.ID, qid = Model.ID  })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new {  id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px; " src='@Url.Content("~/delete.png")' /></a>
         </div>
     }
 
