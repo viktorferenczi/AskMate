@@ -66,26 +66,26 @@
 
         @foreach (var q in Model)
         {
-            <div style="background-color:#e0efff; margin-top:10px; border-radius:7px;padding-left:5px;padding-right:5px;">
+            <div style="background-color:#e0efff; margin-top:10px; border-radius:7px;padding-left:5px;padding-right:5px;padding-bottom:2px">
                 <li>
                     <div style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px">
                         <h2 style="float:none">@q.Title</h2>
-                        <h3 style="font-size:15px"><img style="float:none; margin-left:73%; height:16px; width:16px;padding-bottom:2px;" src='@Url.Content("~/clicks.png")' /> @q.NumOfViews <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/comment.png")' />@q.NumOfMessages <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/date.png")' /> @q.PostedDate </h3>
-                        <h3 style="margin-left:90%; padding-top:4px; font-size:15px;"><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' />@q.Like <img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' />@q.Dislike</h3>
                     </div>
-                    <h3 style="max-width:600px; float:none;font-size:20px">@q.Text</h3>
-                    <div style="float:none; margin-left:94%; padding-bottom:5px ">
-                        <a style="margin-left:0px;" href='@Url.Action("Question", new { id = q.ID })'>
+                    <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text</h3>
+                    <div style="float:left; margin-right:1%;margin-bottom:2px">
+
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("Question", new { id = q.ID })'>
                             <img style="height:18px; width:15px; " src='@Url.Content("~/view.png")' />
                         </a>
-                        <a style="margin-left:0px;" href='@Url.Action("QuestionEdit", new { id = q.ID })'>
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("QuestionEdit", new { id = q.ID })'>
                             <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
                         </a>
-                        <a style="margin-left:0px;" href='@Url.Action("Delete", new { id = q.ID })'>
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("Delete", new { id = q.ID })'>
                             <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
                         </a>
-
                     </div>
+                    <h3 style="font-size:15px; margin-top:1.13%"><img style="margin-left:0%; padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' />@q.Like <img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' />@q.Dislike<img style="float:none; margin-left:2%; height:16px; width:16px;padding-bottom:2px;" src='@Url.Content("~/clicks.png")' /> @q.NumOfViews <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/comment.png")' />@q.NumOfMessages <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/date.png")' /> @q.PostedDate </h3>
+
                 </li>
             </div>
         }
@@ -102,28 +102,6 @@ else
     </div>
 }
 <ul class="circles" style="pointer-events:none;  ">
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
     <li></li>
     <li></li>
     <li></li>

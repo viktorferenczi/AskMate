@@ -10,11 +10,13 @@
         <form action="/Home/AskQuestion" method="post">    
             <div class="form-group">
                 <label for="Title" class="control-label"></label>
-                <input  name="Title" class="form-control" placeholder="Question title" required />
+                <input style="float:left" name="Title" class="form-control" placeholder="Question title" maxlength="30" required /> 
+                <div class=" text-danger">   Maximum 30 character!</div>
             </div>
             <div class="form-group">
                 <label for="Text" class="control-label"></label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="Text" placeholder="Your question goes here.." style="width:200%; min-height:370px" required></textarea>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="Text" placeholder="Your question goes here.." style="width:165%; min-height:350px" maxlength="300" required></textarea>
+                <div class=" text-danger">   Maximum 300 character!</div>
             </div>
            <div class="form-group">
                 <label for="Image" class="control-label"></label>
