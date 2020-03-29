@@ -74,7 +74,7 @@
                     <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text</h3>
                     <div style="float:left; margin-right:1%;margin-bottom:2px">
 
-                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("Question", new { id = q.ID })'>
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("View", new { id = q.ID })'>
                             <img style="height:18px; width:15px; " src='@Url.Content("~/view.png")' />
                         </a>
                         <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("QuestionEdit", new { id = q.ID })'>

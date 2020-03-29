@@ -19,19 +19,16 @@ namespace AskMate.Controllers
         {
             _logger = logger;
             _loader = loader;
-            
         }
     
 
         public IActionResult Index()
-        {
-           
+        {     
             return View();
         }
 
         public IActionResult Privacy()
-        {
-            
+        {            
             return View();
         }
 
@@ -42,7 +39,6 @@ namespace AskMate.Controllers
 
         public IActionResult QuestionAsking()
         {
-
             return View();
         }
 
@@ -56,13 +52,19 @@ namespace AskMate.Controllers
         {
             var questionModel = _loader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == id);
-            question.NumOfViews++;
             if (comment != null)
             {
                _loader.AddComment(id, comment,image);
-                question.NumOfMessages++;
             }
             return View(question);
+        }
+
+        public RedirectResult View(int id)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == id);
+            question.NumOfViews++;
+            return Redirect($"/Home/Question/{id}");
         }
 
         public IActionResult Delete(int id)
@@ -83,7 +85,6 @@ namespace AskMate.Controllers
         {
             var questionModel = _loader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == qid);
-            question.NumOfMessages--;
             _loader.DeleteComment(id);
             return Redirect($"/Home/Question/{qid}");
         }

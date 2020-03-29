@@ -13,10 +13,7 @@ namespace AskMate.Domain
     {
         private List<Question> ListOfQuestions = new List<Question>();
 
-        public FakeDataLoader()
-        {
-            LoadQuestion();
-        }
+      
         
         public int AddQuestion(string title, string text, string image)
         {
@@ -30,8 +27,6 @@ namespace AskMate.Domain
                 nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
             }
             ListOfQuestions.Add(new Question(nextID,title, text, image, DateTime.Now));
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
             return nextID;
         }
 
@@ -42,8 +37,6 @@ namespace AskMate.Domain
             {
                 if(question.ID.Equals(questionId))
                 {
-                    WriteQuestionToCSV();
-                    WriteAnswerToCSV();
                     return question.ListOfAnswers.Count;
                 }
             }
@@ -57,8 +50,6 @@ namespace AskMate.Domain
             {
                 if (question.ID.Equals(questionId))
                 {
-                    WriteQuestionToCSV();
-                    WriteAnswerToCSV();
                     return question;
                 }
             }
@@ -94,8 +85,6 @@ namespace AskMate.Domain
                 {
                     q.ListOfAnswers.Add(new Answer(nextID, message,questionID,image,DateTime.Now));
                     q.NumOfMessages++;
-                    WriteQuestionToCSV();
-                    WriteAnswerToCSV();
                     return nextID;
 
                 }
@@ -113,8 +102,6 @@ namespace AskMate.Domain
                     ListOfQuestions.Remove(ListOfQuestions[i]);
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
 
         public void DeleteComment(int ID)
@@ -132,8 +119,6 @@ namespace AskMate.Domain
                     }
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
 
         public void EditQuestion(int qid,string title, string text)
@@ -153,8 +138,6 @@ namespace AskMate.Domain
                     }
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
         public void Like(int qid)
         {
@@ -163,10 +146,9 @@ namespace AskMate.Domain
                 if(q.ID == qid)
                 {
                     q.Like++;
+
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
         public void Dislike(int qid)
         {
@@ -177,8 +159,6 @@ namespace AskMate.Domain
                     q.Dislike++;
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
 
         public void LikeAnswer(int aid,int qid)
@@ -196,8 +176,6 @@ namespace AskMate.Domain
                     }
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
         public void DislikeAnswer(int aid,int qid)
         {
@@ -215,117 +193,117 @@ namespace AskMate.Domain
                     }
                 }
             }
-            WriteQuestionToCSV();
-            WriteAnswerToCSV();
         }
         
-        public void WriteQuestionToCSV()
-        {
-            string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
-            using (var w = new StreamWriter(questionDatabase))
-            {
-                for (int i = 0; i < ListOfQuestions.Count; i++)
-                {
-                    var q = ListOfQuestions[i];
-                    if (string.IsNullOrEmpty(q.Image))
-                    {
-                        q.Image = "";
-                    }
+        //public void WriteQuestionToCSV()
+        //{
+        //    string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
+        //    using (var w = new StreamWriter(questionDatabase))
+        //    {
+        //        for (int i = 0; i < ListOfQuestions.Count; i++)
+        //        {
+        //            var q = ListOfQuestions[i];
+        //            if (string.IsNullOrEmpty(q.Image))
+        //            {
+        //                q.Image = "";
+        //            }
                    
-                    w.WriteLine($"{q.ID},{q.Title},{q.Text},{q.Image},{q.Like},{q.Dislike},{q.NumOfMessages},{q.NumOfViews},{q.PostedDate}");
-                    w.Flush();
-                }
-            }
-        }
+        //            w.WriteLine($"{q.ID},{q.Title},{q.Text},{q.Image},{q.Like},{q.Dislike},{q.NumOfMessages},{q.NumOfViews},{q.PostedDate}");
+        //            w.Flush();
+        //        }
+        //    }
+        //}
 
-        public void WriteAnswerToCSV()
-        {
-            string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
-            using (var w = new StreamWriter(questionDatabase))
-            {
-                foreach (var q in ListOfQuestions)
-                {
-                    foreach (var a in q.ListOfAnswers)
-                    {
-                        if(string.IsNullOrEmpty(a.Image))
-                        {
-                            a.Image = "";
-                        }
-                        w.WriteLine($"{q.ID},{a.ID},{a.Text},{a.Image},{a.UpVotes},{a.DownVotes},{a.PostedDate}");
-                        w.Flush();
-                    }
+        //public void WriteAnswerToCSV()
+        //{
+        //    string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
+        //    using (var w = new StreamWriter(questionDatabase))
+        //    {
+        //        foreach (var q in ListOfQuestions)
+        //        {
+        //            foreach (var a in q.ListOfAnswers)
+        //            {
+        //                if(string.IsNullOrEmpty(a.Image))
+        //                {
+        //                    a.Image = "";
+        //                }
+        //                w.WriteLine($"{q.ID},{a.ID},{a.Text},{a.Image},{a.UpVotes},{a.DownVotes},{a.PostedDate}");
+        //                w.Flush();
+        //            }
 
-                }
-            }
-        }
-        public List<Question> LoadQuestion()
-        {
-            string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
-            string answerDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
-            string[] lines = File.ReadAllLines(questionDatabase);
-            string[] anslines = File.ReadAllLines(answerDatabase);
-            Regex CSVParser = new Regex(",");
-            Regex AnsParser = new Regex(",");
-            int rowcount = 0;
-            foreach (var row in lines)
-            {
+        //        }
+        //    }
+        //}
+
+
+        //public List<Question> LoadQuestion()
+        //{
+        //    string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
+        //    string answerDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AnswerDatabase.csv");
+        //    string[] lines = File.ReadAllLines(questionDatabase);
+        //    string[] anslines = File.ReadAllLines(answerDatabase);
+        //    Regex CSVParser = new Regex(",");
+        //    Regex AnsParser = new Regex(",");
+        //    int rowcount = 0;
+        //    foreach (var row in lines)
+        //    {
                 
-                Question q = new Question();
-                String[] Fields = CSVParser.Split(row);
-                for (int i = 0; i < Fields.Length; i++)
-                {
-                    Fields[i] = Fields[i].TrimStart(' ', '"');
-                    Fields[i] = Fields[i].TrimEnd('"');
-                }
-                q.ID = int.Parse(Fields[0]);
-                q.Title = Fields[1];
-                q.Text = Fields[2];
-                if(Fields[3]!= null)
-                {
-                    q.Image = Fields[3];
-                }
-                else
-                {
-                    q.Image = "";
-                }
+        //        Question q = new Question();
+        //        String[] Fields = CSVParser.Split(row);
+        //        for (int i = 0; i < Fields.Length; i++)
+        //        {
+        //            Fields[i] = Fields[i].TrimStart(' ', '"');
+        //            Fields[i] = Fields[i].TrimEnd('"');
+        //        }
+        //        q.ID = int.Parse(Fields[0]);
+        //        q.Title = Fields[1];
+        //        q.Text = Fields[2];
+        //        if(Fields[3]!= null)
+        //        {
+        //            q.Image = Fields[3];
+        //        }
+        //        else
+        //        {
+        //            q.Image = "";
+        //        }
                
-                q.Like = int.Parse(Fields[4]);
-                q.Dislike = int.Parse(Fields[5]);
-                q.NumOfMessages = int.Parse(Fields[6]);
-                q.NumOfViews = int.Parse(Fields[7]);
-                q.PostedDate = DateTime.Parse(Fields[8]);
-                ListOfQuestions.Add(q);
-                ListOfQuestions[rowcount].ListOfAnswers = new List<Answer>();
-                foreach (var ansrow in anslines)
-                {
-                    Answer ans = new Answer();
-                    String[] ansFields = AnsParser.Split(ansrow);
-                    for (int j = 0; j < ansFields.Length; j++)
-                    {
-                        ansFields[j] = ansFields[j].TrimStart(' ', '"');
-                        ansFields[j] = ansFields[j].TrimEnd('"');
-                    }
-                    if (int.Parse(ansFields[0]) == q.ID)
-                    {
-                        ans.ID = int.Parse(ansFields[1]);
-                        ans.Text = ansFields[2];
-                        if (Fields[3] != null)
-                        {
-                            ans.Image = ansFields[3];
-                        }
-                        else
-                        {
-                            ans.Image = "";
-                        }
-                        ans.UpVotes = int.Parse(ansFields[4]);
-                        ans.DownVotes = int.Parse(ansFields[5]);
-                        ans.PostedDate = DateTime.Parse(ansFields[6]);
-                        ListOfQuestions[rowcount].ListOfAnswers.Add(ans);
-                    }
-                }
-               rowcount++;
-            }
-            return ListOfQuestions;
-        }
+        //        q.Like = int.Parse(Fields[4]);
+        //        q.Dislike = int.Parse(Fields[5]);
+        //        q.NumOfMessages = int.Parse(Fields[6]);
+        //        q.NumOfViews = int.Parse(Fields[7]);
+        //        q.PostedDate = DateTime.Parse(Fields[8]);
+        //        ListOfQuestions.Add(q);
+        //        ListOfQuestions[rowcount].ListOfAnswers = new List<Answer>();
+        //        foreach (var ansrow in anslines)
+        //        {
+        //            Answer ans = new Answer();
+        //            String[] ansFields = AnsParser.Split(ansrow);
+        //            for (int j = 0; j < ansFields.Length; j++)
+        //            {
+        //                ansFields[j] = ansFields[j].TrimStart(' ', '"');
+        //                ansFields[j] = ansFields[j].TrimEnd('"');
+        //            }
+        //            if (int.Parse(ansFields[0]) == q.ID)
+        //            {
+        //                ans.ID = int.Parse(ansFields[1]);
+        //                ans.Text = ansFields[2];
+        //                if (Fields[3] != null)
+        //                {
+        //                    ans.Image = ansFields[3];
+        //                }
+        //                else
+        //                {
+        //                    ans.Image = "";
+        //                }
+        //                ans.UpVotes = int.Parse(ansFields[4]);
+        //                ans.DownVotes = int.Parse(ansFields[5]);
+        //                ans.PostedDate = DateTime.Parse(ansFields[6]);
+        //                ListOfQuestions[rowcount].ListOfAnswers.Add(ans);
+        //            }
+        //        }
+        //       rowcount++;
+        //    }
+        //    return ListOfQuestions;
+        //}
     }
 }
