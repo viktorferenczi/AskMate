@@ -402,13 +402,14 @@ namespace AskMate.Domain
                                 if (comment.ID.Equals(commentID))
                                 {
                                     answer.ListOfComments.Remove(comment);
+                                    return;
                                 }
                             }
                         }
                     }
                 }
             }
-            throw new Exception("There is no such ID");
+          
         }
 
 

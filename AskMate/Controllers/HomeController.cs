@@ -225,12 +225,12 @@ namespace AskMate.Controllers
         }
 
 
-        public IActionResult DeleteCommentFromAnswer(int qid,int aid, int commentid)
+        public IActionResult DeleteCommentFromAnswer(int commentid, int questionid, int answerid)
         {
             var questionModel = _loader.GetQuestions();
-            var question = questionModel.FirstOrDefault(q => q.ID == qid);
-            _loader.DeleteCommentFromAnswer(qid, aid, commentid);
-            return Redirect($"/Home/Question/{qid}");
+            var question = questionModel.FirstOrDefault(q => q.ID == questionid);
+            _loader.DeleteCommentFromAnswer(questionid, answerid, commentid);
+            return Redirect($"/Home/Question/{questionid}");
         }
 
     }
