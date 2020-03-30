@@ -196,7 +196,7 @@ namespace AskMate.Domain
         }
 
 
-        public void EditAnswer(int qid,  int answerid, string text)
+        public void EditAnswer(int qid,  int aid, string text)
         {
             foreach (var q in ListOfQuestions)
             {
@@ -204,7 +204,7 @@ namespace AskMate.Domain
                 {
                     foreach (var ans in q.ListOfAnswers)
                     {
-                        if (ans.ID == answerid)
+                        if (ans.ID == aid)
                         {
                             if (text != ans.Text & text != null)
                             {
@@ -214,6 +214,23 @@ namespace AskMate.Domain
                     }
                 }
             }
+        }
+
+        public Answer GetAnswerToQuestion(int qid, int aid)
+        {
+            Answer ansz = new Answer();
+            foreach (var q in ListOfQuestions)
+            {
+                if(qid == q.ID)
+                {
+                    foreach (var ans in q.ListOfAnswers)
+                    {
+                        if (ans.ID == aid)
+                            ansz = ans;
+                    }
+                }
+            }
+            return ansz;
         }
 
 
