@@ -195,6 +195,45 @@ namespace AskMate.Domain
             }
         }
 
+
+        public void EditAnswer(int qid,  int aid, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if(qid == q.ID)
+                {
+                    foreach (var ans in q.ListOfAnswers)
+                    {
+                        if (ans.ID == aid)
+                        {
+                            if (text != ans.Text & text != null)
+                            {
+                                ans.Text = text;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public Answer GetAnswerToQuestion(int qid, int aid)
+        {
+            Answer ansz = new Answer();
+            foreach (var q in ListOfQuestions)
+            {
+                if(qid == q.ID)
+                {
+                    foreach (var ans in q.ListOfAnswers)
+                    {
+                        if (ans.ID == aid)
+                            ansz = ans;
+                    }
+                }
+            }
+            return ansz;
+        }
+
+
         //public void WriteQuestionToCSV()
         //{
         //    string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");

@@ -91,6 +91,13 @@ namespace AskMate.Controllers
             return View(question);
         }
 
+        public IActionResult AnswerEdit([FromQuery]int aid, [FromQuery] int qid, [FromForm(Name = "Text")] string text)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+            _loader.EditAnswer(aid, qid,text);
+            return View(_loader.GetAnswerToQuestion(qid, aid));
+        }
         public IActionResult DeleteAnswer(int id,int qid)
         {
             var questionModel = _loader.GetQuestions();
