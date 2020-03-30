@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AskMate.Domain
 {
-    public class FakeDataLoader : IDataLoader
+    public class DataLoader : IDataLoader
     {
         private List<Question> ListOfQuestions = new List<Question>();
 
@@ -63,7 +63,7 @@ namespace AskMate.Domain
 
 
 
-        public int AddComment(int questionID,string message,string image)
+        public int AddAnswer(int questionID,string message,string image)
         {
             int nextID = 0;
             foreach (var q in ListOfQuestions)
@@ -104,7 +104,7 @@ namespace AskMate.Domain
             }
         }
 
-        public void DeleteComment(int ID)
+        public void DeleteAnswer(int ID)
         {
 
             foreach (var q in ListOfQuestions)
@@ -194,7 +194,7 @@ namespace AskMate.Domain
                 }
             }
         }
-        
+
         //public void WriteQuestionToCSV()
         //{
         //    string questionDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "QuestionDatabase.csv");
@@ -207,7 +207,7 @@ namespace AskMate.Domain
         //            {
         //                q.Image = "";
         //            }
-                   
+
         //            w.WriteLine($"{q.ID},{q.Title},{q.Text},{q.Image},{q.Like},{q.Dislike},{q.NumOfMessages},{q.NumOfViews},{q.PostedDate}");
         //            w.Flush();
         //        }
@@ -247,7 +247,7 @@ namespace AskMate.Domain
         //    int rowcount = 0;
         //    foreach (var row in lines)
         //    {
-                
+
         //        Question q = new Question();
         //        String[] Fields = CSVParser.Split(row);
         //        for (int i = 0; i < Fields.Length; i++)
@@ -266,7 +266,7 @@ namespace AskMate.Domain
         //        {
         //            q.Image = "";
         //        }
-               
+
         //        q.Like = int.Parse(Fields[4]);
         //        q.Dislike = int.Parse(Fields[5]);
         //        q.NumOfMessages = int.Parse(Fields[6]);
@@ -305,5 +305,153 @@ namespace AskMate.Domain
         //    }
         //    return ListOfQuestions;
         //}
+
+
+        public int AddCommentToQuestion(int questionID, string message)
+        {
+            int nextID = 0;
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ListOfComments.Count == 0)
+                {
+                    nextID = 1;
+                }
+                else
+                {
+                    nextID = q.ListOfComments.Select(aq => q.ID).Max() + 1;
+                }
+            }
+
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    q.ListOfComments.Add(new Comment(nextID, message, questionID));
+                    return nextID;
+                }
+            }
+            return nextID;
+        }
+
+        public void DeleteCommentFromQuestion(int ID, int commentID)
+        {
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(ID))
+                {
+                    foreach (var comment in q.ListOfComments)
+                    {
+                        if (comment.ID == commentID)
+                        {
+                            q.ListOfComments.Remove(comment);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public int AddCommentToAnswer(int questionID, int answerID, string message)
+        {
+            int nextID = 0;
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ListOfComments.Count == 0)
+                {
+                    nextID = 1;
+                }
+                else
+                {
+                    nextID = q.ListOfComments.Select(aq => q.ID).Max() + 1;
+                }
+            }
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    foreach (var answer in q.ListOfAnswers)
+                    {
+                        if (answer.ID.Equals(answerID))
+                        {
+                            answer.ListOfComments.Add(new Comment(nextID, message, questionID));
+                            return nextID;
+                        }
+                    }
+                }
+            }
+            return nextID;
+        }
+
+
+        public void DeleteCommentFromAnswer(int questionID,int answerID, int commentID)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    foreach (var answer in q.ListOfAnswers)
+                    {
+                        if (answer.ID.Equals(answerID))
+                        {
+                            foreach (var comment in answer.ListOfComments)
+                            {
+                                if (comment.ID.Equals(commentID))
+                                {
+                                    answer.ListOfComments.Remove(comment);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            throw new Exception("There is no such ID");
+        }
+
+
+        public void EditCommentForQuestion(int qid, int commentID, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var comment in q.ListOfComments)
+                    {
+                        if (comment.ID.Equals(commentID))
+                        {
+                            comment.Text = text;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void EditCommentForAnswer(int qid, int commentID, int answerID, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var answer in q.ListOfAnswers)
+                    {
+                        if (answer.ID.Equals(answerID))
+                        {
+                            foreach (var comment in answer.ListOfComments)
+                            {
+                                if (comment.ID.Equals(commentID))
+                                {
+                                    comment.Text = text;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }

@@ -13,9 +13,9 @@ namespace AskMate.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly FakeDataLoader _loader;
+        private readonly DataLoader _loader;
 
-        public HomeController(ILogger<HomeController> logger, FakeDataLoader loader)
+        public HomeController(ILogger<HomeController> logger, DataLoader loader)
         {
             _logger = logger;
             _loader = loader;
@@ -48,13 +48,23 @@ namespace AskMate.Controllers
             return View("QuestionList",_loader.GetQuestions());
         }
      
-        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment, string image )
+        public IActionResult Question(int id, [FromForm(Name = "comment")] string comment, string image, [FromForm(Name = "question_comment")] string message, [FromForm(Name = "anid")] string anid, [FromForm(Name = "answer_message")] string answermessage)
         {
             var questionModel = _loader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == id);
             if (comment != null)
             {
-               _loader.AddComment(id, comment,image);
+               _loader.AddAnswer(id, comment,image);
+            }
+
+            if (message != null)
+            {
+                _loader.AddCommentToQuestion(id, message);
+            }
+
+            if (answermessage != null)
+            {
+                _loader.AddCommentToAnswer(id, Convert.ToInt32(anid), answermessage);
             }
             return View(question);
         }
@@ -85,7 +95,7 @@ namespace AskMate.Controllers
         {
             var questionModel = _loader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == qid);
-            _loader.DeleteComment(id);
+            _loader.DeleteAnswer(id);
             return Redirect($"/Home/Question/{qid}");
         }
 
@@ -203,6 +213,24 @@ namespace AskMate.Controllers
             List = List.OrderBy(q => q.NumOfViews).ToList();
             List.Reverse();
             return View("QuestionList", List);
+        }
+
+
+        public IActionResult DeleteCommentFromQuestion(int commentid, int questionid)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == questionid);
+            _loader.DeleteCommentFromQuestion(questionid, commentid);
+            return Redirect($"/Home/Question/{questionid}");
+        }
+
+
+        public IActionResult DeleteCommentFromAnswer(int qid,int aid, int commentid)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+            _loader.DeleteCommentFromAnswer(qid, aid, commentid);
+            return Redirect($"/Home/Question/{qid}");
         }
 
     }

@@ -12,7 +12,7 @@ namespace AskMate.Domain
         int AddQuestion(string title, string text,string image);
         int CountAnswers(int questionId);
 
-        int AddComment(int questionId, string message,string image);
+        int AddAnswer(int questionId, string message,string image);
 
     }
 }
