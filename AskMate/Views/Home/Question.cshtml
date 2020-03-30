@@ -20,6 +20,37 @@
             <a style="margin-left:0px;" href='@Url.Action("Like", new { qid = Model.ID })'><img style="height:16px; width:10px; " src='@Url.Content("~/upvote.png")' /></a>@Model.Like <a style="margin-left:0px;" href='@Url.Action("Dislike", new { qid = Model.ID })'><img style="height:16px; width:10px; " src='@Url.Content("~/downvote.png")' /></a> @Model.Dislike
         </h3>
     </div>
+
+    @if (Model.ListOfComments.Count != 0)
+    {
+
+        @foreach (var comment in Model.ListOfComments)
+        {
+
+
+            @comment.Text <a>- Edited  @comment.Edited times.</a> <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("DeleteCommentFromQuestion", new { commentid = comment.ID, questionid = Model.ID  })'>
+                <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
+            </a>
+
+            <br />
+
+
+
+        }
+        <form method="post">
+            <input class="form-control" type="text" name="question_comment" value="" placeholder="Add comment to question" />
+            <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
+        </form>
+    }
+    else
+    {
+        <form method="post">
+            <input class="form-control" type="text" name="question_comment" value="" placeholder="Add comment to question" />
+            <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
+        </form>
+    }
+
+
 </div>
 
 @if (Model.ListOfAnswers.Count != 0)
@@ -27,30 +58,64 @@
 
     @foreach (var an in Model.ListOfAnswers)
     {
-        
-<div style="font-size:17px; background-color:#e0efff;border-radius:7px;padding-left:3px;padding-right:3px;margin-right:430px; word-wrap:break-word">
-    <h2 style="font-size:24px; float:none; padding-top:10px; margin-top:5px ">@an.Text</h2>
-    @if (an.Image != null)
-    {
-        <img src="@an.Image" style="max-height:400px; max-width: 400px" />
+
+        <div style="font-size:17px; background-color:#e0efff;border-radius:7px;padding-left:3px;padding-right:3px;margin-right:430px; word-wrap:break-word">
+            <h2 style="font-size:24px; float:none; padding-top:10px; margin-top:5px ">@an.Text</h2>
+            @if (an.Image != null)
+            {
+                <img src="@an.Image" style="max-height:400px; max-width: 400px" />
+            }
+            <div>
+                <a style="margin-left:0px; margin-left:1%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new { id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px;margin-left:2%; margin-right:0% " src='@Url.Content("~/delete.png")' /></a>
+            </div>
+        </div>
+        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("AnswerEdit", new { aid = an.ID, qid = Model.ID })'>
+            <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
+        </a>
+
+        @if (an.ListOfComments.Count != 0)
+        {
+
+            @foreach (var comment in an.ListOfComments)
+            {
+
+                @comment.Text <a>Edited  @comment.Edited times.</a> <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("DeleteCommentFromAnswer", new { commentid = comment.ID, questionid = Model.ID, answerid = an.ID })'>
+                    <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
+                </a>
+                <br />
+
+
+            }
+            <form method="post">
+                <input class="form-control" type="text" name="answer_message" value="" placeholder="Add comment to answer" />
+                <input type="hidden" name="anid" value="@an.ID" />
+                <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
+            </form>
+        }
+        else
+        {
+            <form method="post">
+                <input class="form-control" type="text" name="answer_message" value="" placeholder="Add comment to answer" />
+                <input type="hidden" name="anid" value="@an.ID" />
+                <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
+            </form>
+        }
+
     }
-    <div>
-        <a style="margin-left:0px; margin-left:1%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { aid = an.ID, qid = Model.ID  })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { aid = an.ID, qid = Model.ID  })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new {  id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px;margin-left:2%; margin-right:0% " src='@Url.Content("~/delete.png")' /></a>
-    </div>
-</div>
-}
+
+
 
 }
 else
 {
-    <p> There are no comments yet. :(</p>
+    <p> There are no answers yet. :(</p>
 }
 
 
 <form method="post" style="margin-top:30px">
-    <input type="text" name="comment" placeholder="Enter your comment here" style="width:450px;margin-top:10px" value="" /></br>
+    <input type="text" name="comment" placeholder="Enter your Answer here" style="width:450px;margin-top:10px" value="" /></br>
     <input type="text" name="image" placeholder="Optional: Insert image url" style="margin-top:10px" value="" /></br>
-    <input type="submit" value="Comment" style="margin-top:10px" class="btn btn-primary" />
+    <input type="submit" value="Answer" style="margin-top:10px" class="btn btn-primary" />
 </form>
 <ul class="circles" style="pointer-events:none;  ">
     <li></li>

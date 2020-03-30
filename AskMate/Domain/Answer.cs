@@ -13,21 +13,26 @@ namespace AskMate.Domain
         public int UpVotes { get; set; }
         public int DownVotes { get; set; }
         public DateTime PostedDate { get; set; }
+        public List<Comment> ListOfComments;
 
         public Answer(int id, string text, int QaID, string image, DateTime postedDate)
         {
             ID = id;
             Text = text;
+
+            ListOfComments = new List<Comment>();
             if (image != null)
             {
                 Image = image;
             }
             PostedDate = postedDate;
         }
+
         public Answer(int id, string text, string image, int upVotes, int downVotes)
         {
             ID = id;
             Text = text;
+            ListOfComments = new List<Comment>();
             if (image != null)
             {
                 Image = image;
