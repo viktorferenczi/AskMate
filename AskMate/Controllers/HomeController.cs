@@ -23,8 +23,11 @@ namespace AskMate.Controllers
     
 
         public IActionResult Index()
-        {     
-            return View();
+        {
+            List<Question> List = _loader.GetQuestions();
+            List = List.OrderBy(q => q.PostedDate).ToList();
+            List.Reverse();
+            return View(List);
         }
 
         public IActionResult Privacy()
@@ -80,6 +83,12 @@ namespace AskMate.Controllers
             _loader.EditQuestion(id, title, text);
             return View(question);
         }
+        public IActionResult QuestionAddTag(int id)
+        {
+            var questionModel = _loader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == id);
+            return View(question);
+        }
 
         public IActionResult DeleteAnswer(int id,int qid)
         {
@@ -120,15 +129,11 @@ namespace AskMate.Controllers
             return Redirect($"/Home/Question/{qid}");
         }
 
-
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
 
         public ActionResult SortingByTitleDesc()
         {
@@ -141,7 +146,6 @@ namespace AskMate.Controllers
         {
             List<Question> List = _loader.GetQuestions();
             List = List.OrderBy(q => q.Like).ToList();
-            
             return View("QuestionList", List);
         }
 
@@ -149,7 +153,6 @@ namespace AskMate.Controllers
         {
             List<Question> List = _loader.GetQuestions();
             List = List.OrderBy(q => q.NumOfMessages).ToList();
-           
             return View("QuestionList", List);
         }
         public ActionResult SortingByTitleAsc()
@@ -190,6 +193,7 @@ namespace AskMate.Controllers
             List.Reverse();
             return View("QuestionList", List);
         }
+
         public ActionResult SortingByViewsDesc()
         {
             List<Question> List = _loader.GetQuestions();
@@ -204,6 +208,5 @@ namespace AskMate.Controllers
             List.Reverse();
             return View("QuestionList", List);
         }
-
     }
 }

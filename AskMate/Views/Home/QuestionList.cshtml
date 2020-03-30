@@ -71,7 +71,14 @@
                     <div style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px">
                         <h2 style="float:none">@q.Title</h2>
                     </div>
-                    <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text</h3>
+                    @if (q.Text.Length >= 150)
+                    {
+                        <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text.Substring(0, 150)...</h3>
+                    }
+                    else
+                    {
+                        <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text</h3>
+                    }
                     <div style="float:left; margin-right:1%;margin-bottom:2px">
 
                         <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("View", new { id = q.ID })'>

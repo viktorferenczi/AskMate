@@ -1,50 +1,64 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model List<AskMate.Domain.Question>
 
 
     <div class="text-center" style="z-index:1">
         <h1 class="display-4">Ask, mate!</h1>
-
-        <p style="margin-left:160px; margin-right:160px">
-            AskMate is an open community for anyone that codes.
-            We help you get answers to your toughest coding questions,
-            share knowledge with your coworkers in private, and find your next dream job.
-        </p>
-
-
-        <a href="../Home/QuestionList"><img src="~/pictures/questions.png" width="350" height="350"></a>
-
-        <a href="../Home/QuestionAsking"><img src="~/pictures/answer.png" width="370" height="370" style="margin-bottom:13px"></a>
         
 
+        <div class="text-left">
+            @if (Model.Count != 0)
+            {
+            <ul style="list-style-type: none ; margin-right:30px">
+                @if (Model.Count >= 5)
+                {
+                    <p style="text-align:center">Here's the 5 most recent questions asked on Ask Mate!</p>
+                @for (int i = 0; i < 5; i++)
+                {
+                    <div style="background-color:#e0efff; margin-top:10px; border-radius:7px;padding-left:5px;padding-right:5px;padding-bottom:2px">
+                        <li>
+                            <div style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px">
+                                <h2 style="float:none">@Model[i].Title</h2>
+                            </div>
 
+                            @if (Model[i].Text.Length >= 200)
+                            {
+                                <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@Model[i].Text.Substring(0, 200)...</h3>
+                            }
+                            else
+                            {
+                                <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@Model[i].Text</h3>
+                            }
+
+                            <h3 style="font-size:15px; margin-top:1.13%">
+                                <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("View", new { id = Model[i].ID })'>
+                                    <img style="height:18px; width:15px; " src='@Url.Content("~/view.png")' />
+                                </a>
+                                <img style="margin-left:0%; padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' />@Model[i].Like <img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' />@Model[i].Dislike<img style="float:none; margin-left:2%; height:16px; width:16px;padding-bottom:2px;" src='@Url.Content("~/clicks.png")' /> @Model[i].NumOfViews <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/comment.png")' />@Model[i].NumOfMessages <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/date.png")' /> @Model[i].PostedDate
+                            </h3>
+                        </li>
+                    </div>
+                }
+
+            }
+            </ul>
+            }
+            @if (Model.Count <= 4)
+            {
+                <div class="text-center">
+                    <a href="../Home/QuestionList"><img src="~/pictures/questions.png" width="350" height="350"></a>
+
+                    <a href="../Home/QuestionAsking"><img src="~/pictures/answer.png" width="370" height="370" style="margin-bottom:13px"></a>
+                </div>
+            }
+
+        </div>
     </div>
 
 
 <ul class="circles" style="pointer-events:none; ">
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
     <li></li>
     <li></li>
     <li></li>
