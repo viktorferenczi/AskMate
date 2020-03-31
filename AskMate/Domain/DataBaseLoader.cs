@@ -11,7 +11,7 @@ namespace AskMate.Domain
 
         private List<Question> ListOfQuestions = new List<Question>();
 
-
+        // --------------------------------------------------------------------------------- 1
 
         public int AddQuestion(string title, string text, string image)
         {
@@ -27,7 +27,6 @@ namespace AskMate.Domain
             ListOfQuestions.Add(new Question(nextID, title, text, image, DateTime.Now));
             return nextID;
         }
-
 
         public int CountAnswers(int questionId)
         {
@@ -58,8 +57,6 @@ namespace AskMate.Domain
         {
             return ListOfQuestions;
         }
-
-
 
         public int AddAnswer(int questionID, string message, string image)
         {
@@ -118,6 +115,11 @@ namespace AskMate.Domain
                 }
             }
         }
+
+        // --------------------------------------------------------------------------------- 2
+
+
+
 
         public void EditQuestion(int qid, string title, string text)
         {
@@ -196,7 +198,6 @@ namespace AskMate.Domain
             }
         }
 
-
         public void EditAnswer(int qid, int aid, string text)
         {
             foreach (var q in ListOfQuestions)
@@ -240,6 +241,10 @@ namespace AskMate.Domain
             return null;
 
         }
+
+
+        // --------------------------------------------------------------------------------- 3
+
 
 
 
