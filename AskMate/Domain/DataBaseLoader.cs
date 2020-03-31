@@ -47,11 +47,22 @@ namespace AskMate.Domain
 
         public int CountAnswers(int questionId)
         {
-            foreach (var question in ListOfQuestions)
+            int counter = 0;
+
+            using (var conn = new NpgsqlConnection(connectingString))
+
             {
-                if (question.ID.Equals(questionId))
+                conn.Open();
+
+                using (var command = new NpgsqlCommand($"SELECT COUNT(answer_id) as f FROM answer WHERE question_id = {questionId}", conn)) 
                 {
-                    return question.ListOfAnswers.Count;
+                    var reader = command.ExecuteReader();
+                    while(reader.Read())
+                    {
+                        var fasz = reader["f"];
+                        counter = Convert.ToInt32(fasz);
+                        return counter;
+                    }
                 }
             }
             return 0;
