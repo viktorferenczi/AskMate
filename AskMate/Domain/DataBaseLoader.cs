@@ -10,10 +10,16 @@ namespace AskMate.Domain
     {
 
         private List<Question> ListOfQuestions = new List<Question>();
+        private static readonly string dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+        private static readonly string dbUser = Environment.GetEnvironmentVariable("DB_USER");
+        private static readonly string dbPass = Environment.GetEnvironmentVariable("DB_PASS");
+        private static readonly string dbName = Environment.GetEnvironmentVariable("DB_NAME");
+        public static readonly string connectingString = $"Host={dbHost};Username={dbUser};Password={dbPass};Database={dbName}";
 
+       
         // --------------------------------------------------------------------------------- 1
 
-        public int AddQuestion(string title, string text, string image)
+        public void AddQuestion(string title, string text, string image)
         {
             int nextID;
             if (ListOfQuestions.Count == 0)
@@ -24,8 +30,19 @@ namespace AskMate.Domain
             {
                 nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
             }
-            ListOfQuestions.Add(new Question(nextID, title, text, image, DateTime.Now));
-            return nextID;
+            
+           // return nextID;
+
+            using (var conn = new NpgsqlConnection(connectingString))
+
+            {
+                conn.Open();
+                
+                var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time) VALUES ({title},{text},{image},{DateTime.Now})", conn);
+                
+                command.ExecuteNonQuery();
+            }
+            //ListOfQuestions.Add(new Question(nextID, title, text, image, DateTime.Now));
         }
 
         public int CountAnswers(int questionId)
@@ -273,6 +290,9 @@ namespace AskMate.Domain
                 }
             }
             return nextID;
+
+            
+
         }
 
         public void DeleteCommentFromQuestion(int ID, int commentID)
