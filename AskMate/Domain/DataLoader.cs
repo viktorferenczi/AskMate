@@ -221,7 +221,8 @@ namespace AskMate.Domain
 
         public Answer GetAnswerToQuestion(int qid, int aid)
         {
-            Answer ansz = new Answer();
+
+
             foreach (var q in ListOfQuestions)
             {
                 if(qid == q.ID)
@@ -229,11 +230,17 @@ namespace AskMate.Domain
                     foreach (var ans in q.ListOfAnswers)
                     {
                         if (ans.ID == aid)
-                            ansz = ans;
+                        {
+                            ans.Question = q;
+                            return ans;
+                        }
+                            
                     }
+                    
                 }
             }
-            return ansz;
+            return null;
+
         }
 
 

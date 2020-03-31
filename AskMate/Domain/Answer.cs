@@ -14,6 +14,7 @@ namespace AskMate.Domain
         public int DownVotes { get; set; }
         public DateTime PostedDate { get; set; }
         public List<Comment> ListOfComments;
+        public Question Question { get; set; }
 
         public Answer(int id, string text, int QaID, string image, DateTime postedDate)
         {
