@@ -69,7 +69,7 @@
                 <a style="margin-left:0px; margin-left:1%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new { id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px;margin-left:2%; margin-right:0% " src='@Url.Content("~/delete.png")' /></a>
             </div>
         </div>
-        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("AnswerEdit", new { aid = an.ID, qid = Model.ID })'>
+        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("AnswerEditing", new { aid = an.ID, qid = Model.ID })'>
             <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
         </a>
 

@@ -14,11 +14,13 @@ namespace AskMate.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly DataLoader _loader;
+        private readonly DataBaseLoader _DBloader;
 
-        public HomeController(ILogger<HomeController> logger, DataLoader loader)
+        public HomeController(ILogger<HomeController> logger, DataLoader loader, DataBaseLoader DBloader)
         {
             _logger = logger;
             _loader = loader;
+            _DBloader = DBloader;
         }
     
 
@@ -27,6 +29,7 @@ namespace AskMate.Controllers
             List<Question> List = _loader.GetQuestions();
             List = List.OrderBy(q => q.PostedDate).ToList();
             List.Reverse();
+            _DBloader.Load();
             return View(List);
         }
 
@@ -86,6 +89,8 @@ namespace AskMate.Controllers
             return Redirect("/Home/QuestionList");
         }
 
+       
+
         public IActionResult QuestionEdit(int id, [FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text)
         {
             var questionModel = _loader.GetQuestions();
@@ -100,13 +105,27 @@ namespace AskMate.Controllers
             return View(question);
         }
 
-        public IActionResult AnswerEdit([FromQuery]int aid, [FromQuery] int qid, [FromForm(Name = "Text")] string text)
+        public ActionResult AnswerEditing([FromQuery]int aid, [FromQuery] int qid)
+        {
+            return View("AnswerEdit", _loader.GetAnswerToQuestion(qid, aid));
+        }
+
+     
+
+        public IActionResult AnswerEdit([FromForm(Name = "aid")]int aid, [FromForm(Name = "qid")] int qid, [FromForm(Name = "Text")] string text)
         {
             var questionModel = _loader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == qid);
-            _loader.EditAnswer(aid, qid,text);
-            return View(_loader.GetAnswerToQuestion(qid, aid));
+
+            if (text != null)
+            {
+                _loader.EditAnswer(qid, aid, text);
+            }
+            var ans = _loader.GetAnswerToQuestion(qid, aid); 
+            return View(ans);
         }
+
+
         public IActionResult DeleteAnswer(int id,int qid)
         {
             var questionModel = _loader.GetQuestions();

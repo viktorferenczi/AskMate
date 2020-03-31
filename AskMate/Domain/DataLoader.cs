@@ -139,6 +139,7 @@ namespace AskMate.Domain
                 }
             }
         }
+
         public void Like(int qid)
         {
             foreach (var q in ListOfQuestions)
@@ -150,6 +151,7 @@ namespace AskMate.Domain
                 }
             }
         }
+
         public void Dislike(int qid)
         {
             foreach (var q in ListOfQuestions)
@@ -177,6 +179,7 @@ namespace AskMate.Domain
                 }
             }
         }
+
         public void DislikeAnswer(int aid,int qid)
         {
 

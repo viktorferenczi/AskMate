@@ -28,6 +28,7 @@ namespace AskMate
             
             services.AddControllersWithViews();
             services.AddSingleton(typeof(DataLoader),new DataLoader());
+            services.AddSingleton(typeof(DataBaseLoader), new DataBaseLoader());
         }
 
 
