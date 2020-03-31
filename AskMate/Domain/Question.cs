@@ -10,8 +10,6 @@ namespace AskMate.Domain
         public int ID { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public List<Answer> ListOfAnswers;
-        public List<Comment> ListOfComments;
         public string Image { get; set; }
         public int Like { get; set; }
         public int Dislike { get; set; }

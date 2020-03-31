@@ -9,126 +9,385 @@ namespace AskMate.Domain
     public class DataBaseLoader : IDataLoader
     {
 
-        private List<Question> ListOfQuestionsDB = new List<Question>();
+        private List<Question> ListOfQuestions = new List<Question>();
 
-        public void Load()
+
+
+        public int AddQuestion(string title, string text, string image)
         {
-            var connString = "Host=localhost;Username=postgres;Password=admin;Database=AskMate";
-            using (var conn = new NpgsqlConnection(connString))
+            int nextID;
+            if (ListOfQuestions.Count == 0)
             {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand("SELECT * FROM question", conn))
+                nextID = 1;
+            }
+            else
+            {
+                nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
+            }
+            ListOfQuestions.Add(new Question(nextID, title, text, image, DateTime.Now));
+            return nextID;
+        }
+
+
+        public int CountAnswers(int questionId)
+        {
+            foreach (var question in ListOfQuestions)
+            {
+                if (question.ID.Equals(questionId))
                 {
-                    var reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    return question.ListOfAnswers.Count;
+                }
+            }
+            return 0;
+        }
+
+        public Question GetQuestion(int questionId)
+        {
+
+            foreach (var question in ListOfQuestions)
+            {
+                if (question.ID.Equals(questionId))
+                {
+                    return question;
+                }
+            }
+            return null;
+        }
+
+        public List<Question> GetQuestions()
+        {
+            return ListOfQuestions;
+        }
+
+
+
+        public int AddAnswer(int questionID, string message, string image)
+        {
+            int nextID = 0;
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ListOfAnswers.Count == 0)
+                {
+                    nextID = 1;
+                }
+                else
+                {
+                    nextID = q.ListOfAnswers.Select(aq => q.ID).Max() + 1;
+                }
+            }
+
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    q.ListOfAnswers.Add(new Answer(nextID, message, questionID, image, DateTime.Now));
+                    q.NumOfMessages++;
+                    return nextID;
+
+                }
+            }
+            throw new Exception("There is no such ID");
+
+        }
+
+        public void DeleteQuestion(int ID)
+        {
+            for (int i = 0; i < ListOfQuestions.Count; i++)
+            {
+                if (ListOfQuestions[i].ID == ID)
+                {
+                    ListOfQuestions.Remove(ListOfQuestions[i]);
+                }
+            }
+        }
+
+        public void DeleteAnswer(int ID)
+        {
+
+            foreach (var q in ListOfQuestions)
+            {
+                foreach (var answer in q.ListOfAnswers)
+                {
+                    if (answer.ID == ID)
                     {
-                        var questiontitle = reader["question_title"];
-                        var questiontext = reader["question_text"];
-                        Console.WriteLine($"question title = {questiontitle} question text = {questiontext}");
+                        q.ListOfAnswers.Remove(answer);
+                        q.NumOfMessages--;
+                        return;
+                    }
+                }
+            }
+        }
+
+        public void EditQuestion(int qid, string title, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    if (title != q.Title & title != null)
+                    {
+                        q.Title = title;
+                    }
+
+                    if (text != q.Text & text != null)
+                    {
+                        q.Text = text;
+                    }
+                }
+            }
+        }
+
+        public void Like(int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    q.Like++;
+
+                }
+            }
+        }
+
+        public void Dislike(int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    q.Dislike++;
+                }
+            }
+        }
+
+        public void LikeAnswer(int aid, int qid)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var an in q.ListOfAnswers)
+                    {
+                        if (aid == an.ID)
+                        {
+                            an.UpVotes++;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void DislikeAnswer(int aid, int qid)
+        {
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var an in q.ListOfAnswers)
+                    {
+                        if (aid == an.ID)
+                        {
+                            an.DownVotes++;
+                        }
                     }
                 }
             }
         }
 
 
-        public int AddAnswer(int questionId, string message, string image)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int AddCommentToAnswer(int questionID, int answerID, string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int AddCommentToQuestion(int questionID, string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int AddQuestion(string title, string text, string image)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int CountAnswers(int questionId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteAnswer(int ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteCommentFromAnswer(int questionID, int answerID, int commentID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteCommentFromQuestion(int ID, int commentID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteQuestion(int ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Dislike(int qid)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DislikeAnswer(int aid, int qid)
-        {
-            throw new NotImplementedException();
-        }
-
         public void EditAnswer(int qid, int aid, string text)
         {
-            throw new NotImplementedException();
-        }
-
-        public void EditCommentForAnswer(int qid, int commentID, int answerID, string text)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EditCommentForQuestion(int qid, int commentID, string text)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EditQuestion(int qid, string title, string text)
-        {
-            throw new NotImplementedException();
+            foreach (var q in ListOfQuestions)
+            {
+                if (qid == q.ID)
+                {
+                    foreach (var ans in q.ListOfAnswers)
+                    {
+                        if (ans.ID == aid)
+                        {
+                            if (text != ans.Text & text != null)
+                            {
+                                ans.Text = text;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public Answer GetAnswerToQuestion(int qid, int aid)
         {
-            throw new NotImplementedException();
+
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (qid == q.ID)
+                {
+                    foreach (var ans in q.ListOfAnswers)
+                    {
+                        if (ans.ID == aid)
+                        {
+                            ans.Question = q;
+                            return ans;
+                        }
+
+                    }
+
+                }
+            }
+            return null;
+
         }
 
-        public Question GetQuestion(int questionId)
+
+
+        public int AddCommentToQuestion(int questionID, string message)
         {
-            throw new NotImplementedException();
+            int nextID = 0;
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ListOfComments.Count == 0)
+                {
+                    nextID = 1;
+                }
+                else
+                {
+                    nextID = q.ListOfComments.Select(aq => q.ID).Max() + 1;
+                }
+            }
+
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    q.ListOfComments.Add(new Comment(nextID, message, questionID));
+                    return nextID;
+                }
+            }
+            return nextID;
         }
 
-        public List<Question> GetQuestions()
+        public void DeleteCommentFromQuestion(int ID, int commentID)
         {
-            throw new NotImplementedException();
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(ID))
+                {
+                    foreach (var comment in q.ListOfComments)
+                    {
+                        if (comment.ID == commentID)
+                        {
+                            q.ListOfComments.Remove(comment);
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
-        public void Like(int qid)
+
+        public int AddCommentToAnswer(int questionID, int answerID, string message)
         {
-            throw new NotImplementedException();
+            int nextID = 0;
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ListOfComments.Count == 0)
+                {
+                    nextID = 1;
+                }
+                else
+                {
+                    nextID = q.ListOfComments.Select(aq => q.ID).Max() + 1;
+                }
+            }
+
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    foreach (var answer in q.ListOfAnswers)
+                    {
+                        if (answer.ID.Equals(answerID))
+                        {
+                            answer.ListOfComments.Add(new Comment(nextID, message, questionID));
+                            return nextID;
+                        }
+                    }
+                }
+            }
+            return nextID;
         }
 
-        public void LikeAnswer(int aid, int qid)
+
+        public void DeleteCommentFromAnswer(int questionID, int answerID, int commentID)
         {
-            throw new NotImplementedException();
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID.Equals(questionID))
+                {
+                    foreach (var answer in q.ListOfAnswers)
+                    {
+                        if (answer.ID.Equals(answerID))
+                        {
+                            foreach (var comment in answer.ListOfComments)
+                            {
+                                if (comment.ID.Equals(commentID))
+                                {
+                                    answer.ListOfComments.Remove(comment);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+
+
+        public void EditCommentForQuestion(int qid, int commentID, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var comment in q.ListOfComments)
+                    {
+                        if (comment.ID.Equals(commentID))
+                        {
+                            comment.Text = text;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void EditCommentForAnswer(int qid, int commentID, int answerID, string text)
+        {
+            foreach (var q in ListOfQuestions)
+            {
+                if (q.ID == qid)
+                {
+                    foreach (var answer in q.ListOfAnswers)
+                    {
+                        if (answer.ID.Equals(answerID))
+                        {
+                            foreach (var comment in answer.ListOfComments)
+                            {
+                                if (comment.ID.Equals(commentID))
+                                {
+                                    comment.Text = text;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
