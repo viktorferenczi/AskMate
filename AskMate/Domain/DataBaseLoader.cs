@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using AskMate.Models;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace AskMate.Domain
     public class DataBaseLoader : IDataLoader
     {
 
-        private 
         private static readonly string dbHost = Environment.GetEnvironmentVariable("DB_HOST");
         private static readonly string dbUser = Environment.GetEnvironmentVariable("DB_USER");
         private static readonly string dbPass = Environment.GetEnvironmentVariable("DB_PASS");
@@ -19,10 +19,9 @@ namespace AskMate.Domain
        
         // --------------------------------------------------------------------------------- 1
 
-        public List<Question> GetAllQuestions()
+        public List<QuestionModel> GetQuestions()
         {
-            
-            List<Question> questions = new List<Question>();
+            List<QuestionModel> questions = new List<QuestionModel>();
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
@@ -31,7 +30,7 @@ namespace AskMate.Domain
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        Question question = new Question();
+                        QuestionModel question = new QuestionModel();
                         var question_id = Convert.ToInt32(reader["question_id"]);
                         var submission_time = Convert.ToDateTime(reader["submission_time"]);
                         var view_number = Convert.ToInt32(reader["view_number"]);
@@ -40,11 +39,35 @@ namespace AskMate.Domain
                         var question_title = Convert.ToString(reader["question_title"]);
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
-                        question = new Question(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time);
+                        List<AnswerModel> answerModels = new List<AnswerModel>();
+                        using (var commandanswer = new NpgsqlCommand($"SELECT * FROM answer", conn))
+                        {
+                            var readerans = commandanswer.ExecuteReader();
+                            while (readerans.Read())
+                            {
+
+                                AnswerModel answer = new AnswerModel();
+                                var answer_id = Convert.ToInt32(readerans["answer_id"]);
+                                var adownvote_number = Convert.ToInt32(readerans["downvote_number"]);
+                                var aquestion_id = Convert.ToInt32(readerans["question_id"]);
+                                var asubmission_time = Convert.ToDateTime(readerans["submission_time"]);
+                                var avote_number = Convert.ToInt32(readerans["vote_number"]);
+                                var answer_text = Convert.ToString(readerans["answer_text"]);
+                                var answer_image = Convert.ToString(readerans["answer_image"]);
+                                if (aquestion_id == question_id)
+                                {
+                                    var aquestion_id = Convert.ToInt32(readerans["question_id"]);
+
+                                }
+                            }
+                        }
+                            
+                        question = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time,lis);
                         questions.Add(question);
                     }
                 }
             }
+
             return questions;
         }
         public void AddQuestion(string title, string text, string image)
@@ -110,10 +133,7 @@ namespace AskMate.Domain
             return question;
         }
 
-        public List<Question> GetQuestions()
-        { 
-            return ListOfQuestions;
-        }
+
 
         public void AddAnswer(int questionID, string message, string image)
         {

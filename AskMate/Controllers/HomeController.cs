@@ -67,7 +67,7 @@ namespace AskMate.Controllers
 
             if (answermessage != null)
             {
-                _DBloader.AddCommentToAnswer(id, Convert.ToInt32(anid), answermessage);
+                _DBloader.AddCommentToAnswer(id, answermessage, Convert.ToInt32(anid));
             }
             return View(question);
         }
@@ -116,7 +116,7 @@ namespace AskMate.Controllers
 
             if (text != null)
             {
-                _DBloader.EditAnswer(qid, aid, text);
+                _DBloader.EditAnswer(aid, text, aid);
             }
 
             var ans = _DBloader.GetAnswerToQuestion(qid, aid); 

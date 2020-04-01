@@ -9,9 +9,9 @@ namespace AskMate.Domain
     {
         List<Question> GetQuestions();
         Question GetQuestion(int questionId);
-        void AddQuestion(string title, string text,string image);
-        int CountAnswers(int questionId);
-        int AddAnswer(int questionId, string message,string image);
+        public void AddQuestion(string title, string text,string image);
+        public int CountAnswers(int questionId);
+        public void AddAnswer(int questionId, string message,string image);
         public void DeleteQuestion(int ID);
         public void DeleteAnswer(int ID);
         public void EditQuestion(int qid, string title, string text);
@@ -19,14 +19,14 @@ namespace AskMate.Domain
         public void Dislike(int qid);
         public void LikeAnswer(int aid, int qid);
         public void DislikeAnswer(int aid, int qid);
-        public void EditAnswer(int qid, int aid, string text);
+        public void EditAnswer(int aid, string text, int qid);
         public Answer GetAnswerToQuestion(int qid, int aid);
-        public int AddCommentToQuestion(int questionID, string message);
+        public void AddCommentToQuestion(int questionID, string message);
         public void DeleteCommentFromQuestion(int ID, int commentID);
-        public int AddCommentToAnswer(int questionID, int answerID, string message);
+        public void AddCommentToAnswer(int answerID, string message, int questionID);
         public void DeleteCommentFromAnswer(int questionID, int answerID, int commentID);
-        public void EditCommentForQuestion(int qid, int commentID, string text);
-        public void EditCommentForAnswer(int qid, int commentID, int answerID, string text);
+        public void EditCommentForQuestion(int commentID, string text, int questionID);
+        public void EditCommentForAnswer(string text, int commentID, int answerID , int questionID);
 
 
 

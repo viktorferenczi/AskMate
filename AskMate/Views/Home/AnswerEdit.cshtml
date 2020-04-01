@@ -1,4 +1,4 @@
-﻿@model AskMate.Domain.Answer
+﻿@model AskMate.Models.AnswerModel
 
 @{
     ViewData["Title"] = "AnswerEdit";
@@ -12,7 +12,7 @@
             <div class="form-group">
                 <input asp-for="Text" name="Text" class="form-control" value="" />
                 <input type="hidden" name="aid" value="@Model.ID" />
-                <input type="hidden" name="qid" value="@Model.Question.ID" />
+                @*<input type="hidden" name="qid" value="@Model.Question.ID" />*@
             </div>
 
             <div class="form-group">
