@@ -24,7 +24,7 @@ namespace AskMate.Controllers
 
         public IActionResult Index()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.PostedDate).ToList();
             List.Reverse();
             return View(List);
@@ -171,27 +171,27 @@ namespace AskMate.Controllers
 
         public ActionResult SortingByTitleDesc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.Title).ToList();
             return View("QuestionList", List);
         }
 
         public ActionResult SortingByLikesDesc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.Like).ToList();
             return View("QuestionList", List);
         }
 
         public ActionResult SortingByCommentsDesc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.NumOfMessages).ToList();
             return View("QuestionList", List);
         }
         public ActionResult SortingByTitleAsc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.Title).ToList();
             List.Reverse();
             return View("QuestionList", List);
@@ -199,7 +199,7 @@ namespace AskMate.Controllers
 
         public ActionResult SortingByLikesAsc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.Like).ToList();
             List.Reverse();
             return View("QuestionList", List);
@@ -207,7 +207,7 @@ namespace AskMate.Controllers
 
         public ActionResult SortingByCommentsAsc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.NumOfMessages).ToList();
             List.Reverse();
             return View("QuestionList", List);
@@ -215,14 +215,14 @@ namespace AskMate.Controllers
 
         public ActionResult SortingByDateDesc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.PostedDate).ToList();
             return View("QuestionList", List);
         }
 
         public ActionResult SortingByDateAsc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.PostedDate).ToList();
             List.Reverse();
             return View("QuestionList", List);
@@ -230,14 +230,14 @@ namespace AskMate.Controllers
 
         public ActionResult SortingByViewsDesc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.NumOfViews).ToList();
             return View("QuestionList", List);
         }
 
         public ActionResult SortingByViewsAsc()
         {
-            List<Question> List = _DBloader.GetQuestions();
+            List<QuestionModel> List = _DBloader.GetQuestions();
             List = List.OrderBy(q => q.NumOfViews).ToList();
             List.Reverse();
             return View("QuestionList", List);

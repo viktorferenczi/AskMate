@@ -16,8 +16,8 @@ namespace AskMate.Models
         public int NumOfMessages { get; set; }
         public int NumOfViews { get; set; }
         public DateTime PostedDate { get; set; }
-        public List<AnswerModel> AnswerModels { get; set; }
-        public List<CommentModel> CommentModels { get; set; }
+        public List<AnswerModel> AnswerModels;
+        public List<CommentModel> CommentModels;
 
 
 
@@ -39,11 +39,13 @@ namespace AskMate.Models
             PostedDate = postedDate;
         }
 
-        public QuestionModel(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted, List<AnswerModel> answerModels, List<CommentModel> commentModels)
+        public QuestionModel(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted)
         {
             ID = id;
             Title = title;
             Text = text;
+            AnswerModels = new List<AnswerModel>();
+            CommentModels = new List<CommentModel>();
 
             if (image != null)
             {
@@ -53,8 +55,6 @@ namespace AskMate.Models
             Dislike = dislike;
             NumOfViews = numOfViews;
             PostedDate = posted;
-            AnswerModels = answerModels;
-            CommentModels = commentModels;
         }
         public QuestionModel()
         {

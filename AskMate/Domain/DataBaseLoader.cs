@@ -22,12 +22,16 @@ namespace AskMate.Domain
         public List<QuestionModel> GetQuestions()
         {
             List<QuestionModel> questions = new List<QuestionModel>();
+            List<AnswerModel> answers = new List<AnswerModel>();
+            List<CommentModel> comments = new List<CommentModel>();
+
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
                 using (var command = new NpgsqlCommand($"SELECT * FROM question", conn))
                 {
                     var reader = command.ExecuteReader();
+
                     while (reader.Read())
                     {
                         QuestionModel questionModel = new QuestionModel();
@@ -39,71 +43,102 @@ namespace AskMate.Domain
                         var question_title = Convert.ToString(reader["question_title"]);
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
-                        using (var commandanswer = new NpgsqlCommand($"SELECT * FROM answer", conn))
-                        {
-                            var readerans = commandanswer.ExecuteReader();
-                            while (readerans.Read())
-                            {
 
-                                AnswerModel answer = new AnswerModel();
-                                var answer_id = Convert.ToInt32(readerans["answer_id"]);
-                                var adownvote_number = Convert.ToInt32(readerans["downvote_number"]);
-                                var aquestion_id = Convert.ToInt32(readerans["question_id"]);
-                                var asubmission_time = Convert.ToDateTime(readerans["submission_time"]);
-                                var avote_number = Convert.ToInt32(readerans["vote_number"]);
-                                var answer_text = Convert.ToString(readerans["answer_text"]);
-                                var answer_image = Convert.ToString(readerans["answer_image"]);
-                                if (aquestion_id == question_id)
-                                {
-                                    questionModel.AnswerModels.Add(answer);
-                                }
-                            }
-                        }
-                        using (var commandcomment = new NpgsqlCommand($"SELECT * FROM commentt", conn))
-                        {
-                            var readercomm = commandcomment.ExecuteReader();
-                            while (readercomm.Read())
-                            {
-
-                                CommentModel comment = new CommentModel();
-                                var comment_id = Convert.ToInt32(readercomm["comment_id"]);
-                                var cquestion_id = Convert.ToInt32(readercomm["question_id"]);
-                                var csubmission_time = Convert.ToInt32(readercomm["submission_time"]);
-                                var comment_text = Convert.ToString(readercomm["comment_text"]);
-                                if (cquestion_id == question_id)
-                                {
-                                    questionModel.CommentModels.Add(comment);
-                                }
-                            }
-                        }
-
-                        question = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time,lis);
-                        questions.Add(question);
+                        questionModel = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time);
+                        questions.Add(questionModel);
                     }
                 }
-            }
 
+                conn.Close();
+
+                conn.Open();
+
+                using (var commandanswer = new NpgsqlCommand($"SELECT * FROM answer", conn))
+                {
+                    var readerans = commandanswer.ExecuteReader();
+                    while (readerans.Read())
+                    {
+                        AnswerModel answer = new AnswerModel();
+                        var answer_id = Convert.ToInt32(readerans["answer_id"]);
+                        var adownvote_number = Convert.ToInt32(readerans["downvote_number"]);
+                        var aquestion_id = Convert.ToInt32(readerans["question_id"]);
+                        var asubmission_time = Convert.ToDateTime(readerans["submission_time"]);
+                        var avote_number = Convert.ToInt32(readerans["vote_number"]);
+                        var answer_text = Convert.ToString(readerans["answer_text"]);
+                        var answer_image = Convert.ToString(readerans["answer_image"]);
+                        answer = new AnswerModel(answer_id, aquestion_id, answer_text, answer_image, avote_number, adownvote_number, asubmission_time);
+                        answers.Add(answer);
+                    }
+                }
+
+                conn.Close();
+
+                conn.Open();
+
+                using (var commandcomment = new NpgsqlCommand($"SELECT * FROM commentt", conn))
+                {
+                    var readercomm = commandcomment.ExecuteReader();
+                    while (readercomm.Read())
+                    {
+                        CommentModel comment = new CommentModel();
+                        var comment_id = Convert.ToInt32(readercomm["comment_id"]);
+                        var cquestion_id = Convert.ToInt32(readercomm["question_id"]);
+                        var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
+                        var comment_text = Convert.ToString(readercomm["comment_text"]);
+
+                        comment = new CommentModel(comment_id, comment_text, cquestion_id,csubmission_time);
+                        comments.Add(comment);
+                    }
+                }
+
+                conn.Close();
+
+                foreach (var question in questions)
+                {
+                    foreach (var answer in answers)
+                    {
+                        if (question.ID == answer.QuestionID)
+                        {
+                            question.AnswerModels.Add(answer);
+                        }
+                    }
+                }
+
+                foreach (var question in questions)
+                {
+                    foreach (var comment in comments)
+                    {
+                        if (question.ID == comment.QuestionID)
+                        {
+                            question.CommentModels.Add(comment);
+                        }
+                    }
+                }
+
+            }
             return questions;
         }
+
+
         public void AddQuestion(string title, string text, string image)
         {
-            using (var conn = new NpgsqlConnection(connectingString))
+            var conn = new NpgsqlConnection(connectingString);
+            
+            conn.Open();
+                
+            var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time, view_number,vote_number,downvote_number) VALUES ('{title}','{text}','{image}','{DateTime.Now}',0,0,0)", conn);
+                
+            command.ExecuteNonQuery();
+            conn.Close();
 
-            {
-                conn.Open();
-                
-                var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time) VALUES ({title},{text},{image},{DateTime.Now})", conn);
-                
-                command.ExecuteNonQuery();
-            }
         }
+
 
         public int CountAnswers(int questionId)
         {
             int counter = 0;
 
             using (var conn = new NpgsqlConnection(connectingString))
-
             {
                 conn.Open();
 
@@ -120,6 +155,7 @@ namespace AskMate.Domain
             }
             return 0;
         }
+
 
         public Question GetQuestion(int questionId)
         {
@@ -153,43 +189,41 @@ namespace AskMate.Domain
         public void AddAnswer(int questionID, string message, string image)
         {
             using (var conn = new NpgsqlConnection(connectingString))
-
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time) VALUES ({questionID},{message},{image},{DateTime.Now})", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time) VALUES ({questionID},'{message}','{image}','{DateTime.Now}')", conn);
 
                 command.ExecuteNonQuery();
             }
-
         }
+
 
         public void DeleteQuestion(int ID)
         {
             using (var conn = new NpgsqlConnection(connectingString))
-
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"DELETE FROM question WHERE question_id = {ID}");
+                var command = new NpgsqlCommand($"DELETE FROM question WHERE question_id = {ID}", conn);
 
                 command.ExecuteNonQuery();
             }
         }
+
 
         public void DeleteAnswer(int ID)
         {
-
             using (var conn = new NpgsqlConnection(connectingString))
-
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"DELETE FROM answer WHERE answer_id = {ID}");
+                var command = new NpgsqlCommand($"DELETE FROM answer WHERE answer_id = {ID}", conn);
 
                 command.ExecuteNonQuery();
             }
         }
+
 
         public void EditQuestion(int qid, string title, string text)
         {
@@ -198,8 +232,8 @@ namespace AskMate.Domain
                 conn.Open();
 
                 var command = new NpgsqlCommand($"UPDATE question " +
-                                                $"SET question_title = {title}, question_text = {text}" +
-                                                $"WHERE question_id = {qid}");
+                                                $"SET question_title = '{title}', question_text = '{text}'" +
+                                                $"WHERE question_id = {qid}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -212,7 +246,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"UPDATE question SET vote_number = vote_number + 1 WHERE question_id = {qid}");
+                var command = new NpgsqlCommand($"UPDATE question SET vote_number = vote_number + 1 WHERE question_id = {qid}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -224,11 +258,12 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"UPDATE question SET downvote_number = downvote_number + 1 WHERE question_id = {qid}");
+                var command = new NpgsqlCommand($"UPDATE question SET downvote_number = downvote_number + 1 WHERE question_id = {qid}", conn);
 
                 command.ExecuteNonQuery();
             }
         }
+
 
         public void LikeAnswer(int aid, int qid = 0)
         {
@@ -236,7 +271,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"UPDATE answer SET vote_number = vote_number + 1 WHERE answer_id = {aid}");
+                var command = new NpgsqlCommand($"UPDATE answer SET vote_number = vote_number + 1 WHERE answer_id = {aid}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -245,12 +280,11 @@ namespace AskMate.Domain
 
         public void DislikeAnswer(int aid, int qid = 0)
         {
-
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"UPDATE answer SET downvote_number = downvote_number + 1 WHERE answer_id = {aid}");
+                var command = new NpgsqlCommand($"UPDATE answer SET downvote_number = downvote_number + 1 WHERE answer_id = {aid}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -263,8 +297,8 @@ namespace AskMate.Domain
                 conn.Open();
 
                 var command = new NpgsqlCommand($"UPDATE answer " +
-                                                $"SET answer_text = {text}" +
-                                                $"WHERE answer_id = {aid}");
+                                                $"SET answer_text = '{text}'" +
+                                                $"WHERE answer_id = {aid}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -296,8 +330,9 @@ namespace AskMate.Domain
                 }
             }
             return answer;
-
         }
+
+
         public void AddCommentToQuestion(int questionID, string message)
         {
             using (var conn = new NpgsqlConnection(connectingString))
@@ -305,21 +340,21 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO commentt(question_id, comment_text, submission_time) VALUES ({questionID},{message},{DateTime.Now})", conn);
+                var command = new NpgsqlCommand($"INSERT INTO commentt(question_id, comment_text, submission_time) VALUES ({questionID},'{message}','{DateTime.Now}')", conn);
 
                 command.ExecuteNonQuery();
             }
         }
 
+
         public void DeleteCommentFromQuestion(int commentID, int questionID = 0)
         {
             using (var conn = new NpgsqlConnection(connectingString))
-
             {
                 conn.Open();
 
                 var command = new NpgsqlCommand($"DELETE FROM commentt " +
-                                                $"WHERE comment_id = {commentID}");
+                                                $"WHERE comment_id = {commentID}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -332,7 +367,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO commentt(answer_id, comment_text, submission_time) VALUES ({answerID},{message},{DateTime.Now})", conn);
+                var command = new NpgsqlCommand($"INSERT INTO commentt(answer_id, comment_text, submission_time) VALUES ({answerID},'{message}','{DateTime.Now}')", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -342,16 +377,14 @@ namespace AskMate.Domain
         public void DeleteCommentFromAnswer(int commentID, int questionID = 0, int answerID = 0)
         {
             using (var conn = new NpgsqlConnection(connectingString))
-
             {
                 conn.Open();
 
                 var command = new NpgsqlCommand($"DELETE FROM commentt " +
-                                                $"WHERE comment_id = {commentID}");
+                                                $"WHERE comment_id = {commentID}", conn);
 
                 command.ExecuteNonQuery();
             }
-
         }
 
 
@@ -362,8 +395,8 @@ namespace AskMate.Domain
                 conn.Open();
 
                 var command = new NpgsqlCommand($"UPDATE commentt " +
-                                                $"SET comment_text = {text}" +
-                                                $"WHERE comment_id = {commentID}");
+                                                $"SET comment_text = '{text}'" +
+                                                $"WHERE comment_id = {commentID}", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -376,12 +409,11 @@ namespace AskMate.Domain
                 conn.Open();
 
                 var command = new NpgsqlCommand($"UPDATE commentt " +
-                                                $"SET comment_text = {text}" +
-                                                $"WHERE comment_id = {commentID}");
+                                                $"SET comment_text = '{text}'" +
+                                                $"WHERE comment_id = {commentID}", conn);
 
                 command.ExecuteNonQuery();
             }
         }
-
     }
 }

@@ -11,8 +11,9 @@ namespace AskMate.Domain
         public string Text { get; set; }
         public int QuestionID { get; set; }
         public int AnswerID { get; set; }
-        //public int Edited { get; set; }
-   
+        public int Edited { get; set; }
+        public DateTime SubmissionTime { get; set; }
+
         //Question comment constructor
         public Comment(int id, string text, int questionID)//int edited
         {
