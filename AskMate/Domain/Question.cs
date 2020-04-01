@@ -17,19 +17,22 @@ namespace AskMate.Domain
         public int NumOfViews { get; set; }
         public DateTime PostedDate { get; set; }
 
+        public int MessageNumber { get; set; }
+
 
         
 
 
 
-        public Question(int id, string title, string text, string image, DateTime postedDate)
+        public Question(int id, string title, string text, string image, DateTime postedDate, int messagenumber)
         {
             ID = id;
             Title = title;
             Text = text;
-          
 
-           
+            MessageNumber = messagenumber;
+
+
 
             if (image != null)
             {
@@ -37,12 +40,12 @@ namespace AskMate.Domain
             }
             PostedDate = postedDate;
         }
-        public Question(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted)
+        public Question(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted, int messagenumber)
         {
             ID = id;
             Title = title;
             Text = text;
-         
+            MessageNumber = messagenumber;
             if (image != null)
             {
                 Image = image;

@@ -43,8 +43,9 @@ namespace AskMate.Domain
                         var question_title = Convert.ToString(reader["question_title"]);
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
+                        var question_messagenumber = Convert.ToInt32(reader["message_number"]);
 
-                        questionModel = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time);
+                        questionModel = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time, question_messagenumber);
                         questions.Add(questionModel);
                     }
                 }
@@ -126,7 +127,7 @@ namespace AskMate.Domain
             
             conn.Open();
                 
-            var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time, view_number,vote_number,downvote_number) VALUES ('{title}','{text}','{image}','{DateTime.Now}',0,0,0)", conn);
+            var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time, view_number,vote_number,downvote_number, message_number) VALUES ('{title}','{text}','{image}','{DateTime.Now}',0,0,0,0)", conn);
                 
             command.ExecuteNonQuery();
             conn.Close();
@@ -177,12 +178,43 @@ namespace AskMate.Domain
                         var question_title = Convert.ToString(reader["question_title"]);
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
-                        question = new Question(question_id, question_title, question_text, question_image, vote_number,downvote_number,view_number, submission_time);
+                        var question_messagenummber = Convert.ToInt32(reader["message_number"]);
+                        question = new Question(question_id, question_title, question_text, question_image, vote_number,downvote_number,view_number, submission_time,question_messagenummber);
                     }
                 }
             }
             return question;
         }
+
+        public QuestionModel GetQuestionModel(int questionId)
+        {
+            QuestionModel question = new QuestionModel();
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                using (var command = new NpgsqlCommand($"SELECT * FROM question WHERE question_id = {questionId}", conn))
+                {
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var question_id = Convert.ToInt32(reader["question_id"]);
+                        var submission_time = Convert.ToDateTime(reader["submission_time"]);
+                        var view_number = Convert.ToInt32(reader["view_number"]);
+                        var vote_number = Convert.ToInt32(reader["vote_number"]);
+                        var downvote_number = Convert.ToInt32(reader["downvote_number"]);
+                        var question_title = Convert.ToString(reader["question_title"]);
+                        var question_text = Convert.ToString(reader["question_text"]);
+                        var question_image = Convert.ToString(reader["question_image"]);
+                        var question_messagenummber = Convert.ToInt32(reader["message_number"]);
+                        question = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time, question_messagenummber);
+                    }
+                }
+            }
+            return question;
+        }
+
+
 
 
 
@@ -222,6 +254,32 @@ namespace AskMate.Domain
 
                 command.ExecuteNonQuery();
             }
+        }
+
+        public void PlusNumberOfMessages(int qid)
+        {
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE question SET message_number = message_number + 1 WHERE question_id = {qid}", conn);
+
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void MinusNumberOfMessages(int qid)
+        {
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE question SET message_number = message_number - 1 WHERE question_id = {qid}", conn);
+
+                command.ExecuteNonQuery();
+            }
+
         }
 
 
@@ -409,6 +467,8 @@ namespace AskMate.Domain
 
                 var command = new NpgsqlCommand($"DELETE FROM commentt " +
                                                 $"WHERE comment_id = {commentID}", conn);
+
+               
 
                 command.ExecuteNonQuery();
             }

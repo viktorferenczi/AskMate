@@ -58,6 +58,7 @@ namespace AskMate.Controllers
             if (comment != null)
             {
                _DBloader.AddAnswer(id, comment,image);
+                _DBloader.PlusNumberOfMessages(id);
             }
 
             if (message != null)
@@ -69,6 +70,8 @@ namespace AskMate.Controllers
             {
                 _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage, Convert.ToInt32(anid));
             }
+
+           
             return View(question);
         }
 
@@ -95,6 +98,7 @@ namespace AskMate.Controllers
             _DBloader.EditQuestion(id, title, text);
             return View(question);
         }
+
         public IActionResult QuestionAddTag(int id)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -129,6 +133,7 @@ namespace AskMate.Controllers
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == qid);
             _DBloader.DeleteAnswer(id);
+            _DBloader.MinusNumberOfMessages(qid);
           
             return Redirect($"/Home/Question/{qid}");
         }

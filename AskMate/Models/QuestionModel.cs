@@ -20,16 +20,18 @@ namespace AskMate.Models
         public List<CommentModel> CommentModels;
 
 
+        public int MessageNumber { get; set; }
 
 
 
-        public QuestionModel(int id, string title, string text, string image, DateTime postedDate)
+
+        public QuestionModel(int id, string title, string text, string image, DateTime postedDate, int messagenumber)
         {
             ID = id;
             Title = title;
             Text = text;
 
-
+            MessageNumber = messagenumber;
 
 
             if (image != null)
@@ -39,13 +41,15 @@ namespace AskMate.Models
             PostedDate = postedDate;
         }
 
-        public QuestionModel(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted)
+        public QuestionModel(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted, int messagenumber)
         {
             ID = id;
             Title = title;
             Text = text;
             AnswerModels = new List<AnswerModel>();
             CommentModels = new List<CommentModel>();
+
+            MessageNumber = messagenumber;
 
             if (image != null)
             {
