@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace AskMate.Models
+namespace AskMate.Domain
 {
-    public class CommentModel
+    public class Question_Comment
     {
         public int ID { get; set; }
         public string Text { get; set; }
@@ -12,26 +15,20 @@ namespace AskMate.Models
         public DateTime SubmissionTime { get; set; }
 
         //Question comment constructor
-        public CommentModel(int id, string text, int questionID, DateTime submission)//int edited
+        public Question_Comment(int id, string text, int questionID)//int edited
         {
             ID = id;
             Text = text;
             //this.Edited = edited;
             QuestionID = questionID;
-            SubmissionTime = submission;
         }
         //Answer comment constructor
-        public CommentModel(int answerID, int id, string text, DateTime submission)//int edited
+        public Question_Comment(int answerID, int id, string text)//int edited
         {
             ID = id;
             Text = text;
             //this.Edited = edited;
             AnswerID = answerID;
-            SubmissionTime = submission;
-        }
-        public CommentModel()
-        {
-
         }
     }
 }

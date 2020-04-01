@@ -68,7 +68,7 @@ namespace AskMate.Controllers
 
             if (answermessage != null)
             {
-                _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage, Convert.ToInt32(anid));
+                _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage);
             }
 
            
@@ -264,7 +264,7 @@ namespace AskMate.Controllers
         {
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == questionid);
-            _DBloader.DeleteCommentFromAnswer(questionid, answerid, commentid);
+            _DBloader.DeleteCommentFromAnswer(commentid);
             return Redirect($"/Home/Question/{questionid}");
         }
 

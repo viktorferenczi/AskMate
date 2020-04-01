@@ -23,7 +23,8 @@ namespace AskMate.Domain
         {
             List<QuestionModel> questions = new List<QuestionModel>();
             List<AnswerModel> answers = new List<AnswerModel>();
-            List<CommentModel> comments = new List<CommentModel>();
+            List<Question_CommentModel> questioncomments = new List<Question_CommentModel>();
+            List<Answer_CommentModel> answercomments = new List<Answer_CommentModel>();
 
             using (var conn = new NpgsqlConnection(connectingString))
             {
@@ -76,19 +77,40 @@ namespace AskMate.Domain
 
                 conn.Open();
 
-                using (var commandcomment = new NpgsqlCommand($"SELECT * FROM commentt", conn))
+                using (var commandcomment = new NpgsqlCommand($"SELECT * FROM question_comment", conn))
                 {
                     var readercomm = commandcomment.ExecuteReader();
                     while (readercomm.Read())
                     {
-                        CommentModel comment = new CommentModel();
+                        Question_CommentModel comment = new Question_CommentModel();
                         var comment_id = Convert.ToInt32(readercomm["comment_id"]);
                         var cquestion_id = Convert.ToInt32(readercomm["question_id"]);
                         var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
                         var comment_text = Convert.ToString(readercomm["comment_text"]);
 
-                        comment = new CommentModel(comment_id, comment_text, cquestion_id,csubmission_time);
-                        comments.Add(comment);
+                        comment = new Question_CommentModel(comment_id, comment_text, cquestion_id,csubmission_time);
+                        questioncomments.Add(comment);
+                    }
+                }
+
+                conn.Close();
+
+
+                conn.Open();
+
+                using (var commandcomment = new NpgsqlCommand($"SELECT * FROM answer_comment", conn))
+                {
+                    var readercomm = commandcomment.ExecuteReader();
+                    while (readercomm.Read())
+                    {
+                        Answer_CommentModel comment = new Answer_CommentModel();
+                        var comment_id = Convert.ToInt32(readercomm["comment_id"]);
+                        var canswer_id = Convert.ToInt32(readercomm["answer_id"]);
+                        var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
+                        var comment_text = Convert.ToString(readercomm["comment_text"]);
+
+                        comment = new Answer_CommentModel(comment_id, comment_text, canswer_id, csubmission_time);
+                        answercomments.Add(comment);
                     }
                 }
 
@@ -107,7 +129,23 @@ namespace AskMate.Domain
 
                 foreach (var question in questions)
                 {
-                    foreach (var comment in comments)
+                    foreach (var answer in question.AnswerModels)
+                    {
+
+                    
+                        foreach (var comment in answer.CommentModels)
+                        {
+                            if (question.ID == comment.AnswerID)
+                            {
+                                answer.CommentModels.Add(comment);
+                            }
+                        }
+                    }
+                }
+
+                foreach (var question in questions)
+                {
+                    foreach (var comment in questioncomments)
                     {
                         if (question.ID == comment.QuestionID)
                         {
@@ -425,11 +463,13 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO commentt(question_id, comment_text, submission_time) VALUES ({questionID},'{message}','{DateTime.Now}')", conn);
+                var command = new NpgsqlCommand($"INSERT INTO question_comment(question_id, comment_text, submission_time) VALUES ({questionID},'{message}','{DateTime.Now}')", conn);
 
                 command.ExecuteNonQuery();
             }
         }
+
+      
 
 
         public void DeleteCommentFromQuestion(int commentID, int questionID = 0)
@@ -438,7 +478,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"DELETE FROM commentt " +
+                var command = new NpgsqlCommand($"DELETE FROM question_comment " +
                                                 $"WHERE comment_id = {commentID}", conn);
 
                 command.ExecuteNonQuery();
@@ -452,7 +492,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO commentt(answer_id, question_id, comment_text, submission_time) VALUES ({answerID},null,'{message}','{DateTime.Now}')", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer_comment(answer_id, comment_text, submission_time) VALUES ({answerID},'{message}','{DateTime.Now}')", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -465,7 +505,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"DELETE FROM commentt " +
+                var command = new NpgsqlCommand($"DELETE FROM answer_comment " +
                                                 $"WHERE comment_id = {commentID}", conn);
 
                
@@ -481,7 +521,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"UPDATE commentt " +
+                var command = new NpgsqlCommand($"UPDATE question_comment " +
                                                 $"SET comment_text = '{text}'" +
                                                 $"WHERE comment_id = {commentID}", conn);
 
@@ -495,7 +535,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"UPDATE commentt " +
+                var command = new NpgsqlCommand($"UPDATE answer_comment " +
                                                 $"SET comment_text = '{text}'" +
                                                 $"WHERE comment_id = {commentID}", conn);
 

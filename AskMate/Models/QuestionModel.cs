@@ -17,7 +17,8 @@ namespace AskMate.Models
         public int NumOfViews { get; set; }
         public DateTime PostedDate { get; set; }
         public List<AnswerModel> AnswerModels;
-        public List<CommentModel> CommentModels;
+        public List<Question_CommentModel> CommentModels;
+        public List<Answer_CommentModel> AnswerCommentModels;
 
 
         public int MessageNumber { get; set; }
@@ -47,7 +48,8 @@ namespace AskMate.Models
             Title = title;
             Text = text;
             AnswerModels = new List<AnswerModel>();
-            CommentModels = new List<CommentModel>();
+            CommentModels = new List<Question_CommentModel>();
+            AnswerCommentModels = new List<Answer_CommentModel>();
 
             MessageNumber = messagenumber;
 

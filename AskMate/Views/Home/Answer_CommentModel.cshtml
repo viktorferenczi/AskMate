@@ -1,18 +1,20 @@
-﻿@model AskMate.Models.AnswerModel
+﻿
+@model AskMate.Models.Answer_CommentModel
 
 @{
-    ViewData["Title"] = "AnswerEdit";
+    ViewData["Title"] = "CommentEdit";
 }
 
-<h4>Edit your answer @Model.ID</h4>
-<hr />
+<h1>Answer Comment Edit</h1>
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AnswerEdit" method="post">
+        <form asp-action="CommentEdit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <input asp-for="Text" name="Text" class="form-control" value="Type your new answer here" />
-                <input type="hidden" name="aid" value="@Model.ID" />
-                @*<input type="hidden" name="qid" value="@Model.Question.ID" />*@
+                <input asp-for="Text" name="Text" class="form-control" value="@Model.Text" />
+                <span asp-validation-for="Text" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -23,9 +25,9 @@
 </div>
 
 <div style="margin-top:110px">
-    <a asp-action="QuestionAsking">Add a question</a> 
-    <a asp-action="QuestionList">View question</a> 
-    <a asp-action="Index">Back to the Question</a>
+    <a asp-action="QuestionAsking">Add a question</a> |
+    <a asp-action="QuestionList">View questions</a> |
+    <a asp-action="Index">Back to Home</a>
 </div>
 <ul class="circles" style="pointer-events:none;  ">
     <li></li>
