@@ -30,7 +30,7 @@ namespace AskMate.Domain
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        QuestionModel question = new QuestionModel();
+                        QuestionModel questionModel = new QuestionModel();
                         var question_id = Convert.ToInt32(reader["question_id"]);
                         var submission_time = Convert.ToDateTime(reader["submission_time"]);
                         var view_number = Convert.ToInt32(reader["view_number"]);
@@ -39,7 +39,6 @@ namespace AskMate.Domain
                         var question_title = Convert.ToString(reader["question_title"]);
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
-                        List<AnswerModel> answerModels = new List<AnswerModel>();
                         using (var commandanswer = new NpgsqlCommand($"SELECT * FROM answer", conn))
                         {
                             var readerans = commandanswer.ExecuteReader();
@@ -56,12 +55,28 @@ namespace AskMate.Domain
                                 var answer_image = Convert.ToString(readerans["answer_image"]);
                                 if (aquestion_id == question_id)
                                 {
-                                    var aquestion_id = Convert.ToInt32(readerans["question_id"]);
-
+                                    questionModel.AnswerModels.Add(answer);
                                 }
                             }
                         }
-                            
+                        using (var commandcomment = new NpgsqlCommand($"SELECT * FROM commentt", conn))
+                        {
+                            var readercomm = commandcomment.ExecuteReader();
+                            while (readercomm.Read())
+                            {
+
+                                CommentModel comment = new CommentModel();
+                                var comment_id = Convert.ToInt32(readercomm["comment_id"]);
+                                var cquestion_id = Convert.ToInt32(readercomm["question_id"]);
+                                var csubmission_time = Convert.ToInt32(readercomm["submission_time"]);
+                                var comment_text = Convert.ToString(readercomm["comment_text"]);
+                                if (cquestion_id == question_id)
+                                {
+                                    questionModel.CommentModels.Add(comment);
+                                }
+                            }
+                        }
+
                         question = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time,lis);
                         questions.Add(question);
                     }
