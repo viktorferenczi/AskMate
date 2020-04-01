@@ -9,7 +9,7 @@ namespace AskMate.Domain
     public class DataBaseLoader : IDataLoader
     {
 
-        private List<Question> ListOfQuestions = new List<Question>();
+        private 
         private static readonly string dbHost = Environment.GetEnvironmentVariable("DB_HOST");
         private static readonly string dbUser = Environment.GetEnvironmentVariable("DB_USER");
         private static readonly string dbPass = Environment.GetEnvironmentVariable("DB_PASS");
@@ -19,20 +19,36 @@ namespace AskMate.Domain
        
         // --------------------------------------------------------------------------------- 1
 
+        public List<Question> GetAllQuestions()
+        {
+            
+            List<Question> questions = new List<Question>();
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+                using (var command = new NpgsqlCommand($"SELECT * FROM question", conn))
+                {
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Question question = new Question();
+                        var question_id = Convert.ToInt32(reader["question_id"]);
+                        var submission_time = Convert.ToDateTime(reader["submission_time"]);
+                        var view_number = Convert.ToInt32(reader["view_number"]);
+                        var vote_number = Convert.ToInt32(reader["vote_number"]);
+                        var downvote_number = Convert.ToInt32(reader["downvote_number"]);
+                        var question_title = Convert.ToString(reader["question_title"]);
+                        var question_text = Convert.ToString(reader["question_text"]);
+                        var question_image = Convert.ToString(reader["question_image"]);
+                        question = new Question(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time);
+                        questions.Add(question);
+                    }
+                }
+            }
+            return questions;
+        }
         public void AddQuestion(string title, string text, string image)
         {
-            //int nextID;
-            //if (ListOfQuestions.Count == 0)
-            //{
-            //    nextID = 1;
-            //}
-            //else
-            //{
-            //    nextID = ListOfQuestions.Select(q => q.ID).Max() + 1;
-            //}
-            
-        
-
             using (var conn = new NpgsqlConnection(connectingString))
 
             {
@@ -42,8 +58,6 @@ namespace AskMate.Domain
                 
                 command.ExecuteNonQuery();
             }
-
-            //ListOfQuestions.Add(new Question(nextID, title, text, image, DateTime.Now));
         }
 
         public int CountAnswers(int questionId)
@@ -97,7 +111,7 @@ namespace AskMate.Domain
         }
 
         public List<Question> GetQuestions()
-        {
+        { 
             return ListOfQuestions;
         }
 
@@ -128,7 +142,6 @@ namespace AskMate.Domain
             }
         }
 
-
         public void DeleteAnswer(int ID)
         {
 
@@ -142,11 +155,6 @@ namespace AskMate.Domain
                 command.ExecuteNonQuery();
             }
         }
-
-        // --------------------------------------------------------------------------------- 2
-
-
-
 
         public void EditQuestion(int qid, string title, string text)
         {
@@ -174,7 +182,6 @@ namespace AskMate.Domain
                 command.ExecuteNonQuery();
             }
         }
-
 
         public void Dislike(int qid)
         {
@@ -256,137 +263,88 @@ namespace AskMate.Domain
             return answer;
 
         }
-
-
-        // --------------------------------------------------------------------------------- 3
-
-
-
-
         public void AddCommentToQuestion(int questionID, string message)
         {
-           
-            // xdddd
-            
+            using (var conn = new NpgsqlConnection(connectingString))
 
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"INSERT INTO commentt(question_id, comment_text, submission_time) VALUES ({questionID},{message},{DateTime.Now})", conn);
+
+                command.ExecuteNonQuery();
+            }
         }
 
-        public void DeleteCommentFromQuestion(int ID, int commentID)
+        public void DeleteCommentFromQuestion(int commentID, int questionID = 0)
         {
+            using (var conn = new NpgsqlConnection(connectingString))
 
-            foreach (var q in ListOfQuestions)
             {
-                if (q.ID.Equals(ID))
-                {
-                    foreach (var comment in q.ListOfComments)
-                    {
-                        if (comment.ID == commentID)
-                        {
-                            q.ListOfComments.Remove(comment);
-                            return;
-                        }
-                    }
-                }
+                conn.Open();
+
+                var command = new NpgsqlCommand($"DELETE FROM commentt " +
+                                                $"WHERE comment_id = {commentID}");
+
+                command.ExecuteNonQuery();
             }
         }
 
 
-        public int AddCommentToAnswer(int questionID, int answerID, string message)
+        public void AddCommentToAnswer(int answerID, string message, int questionID = 0)
         {
-            int nextID = 0;
-            foreach (var q in ListOfQuestions)
+            using (var conn = new NpgsqlConnection(connectingString))
             {
-                if (q.ListOfComments.Count == 0)
-                {
-                    nextID = 1;
-                }
-                else
-                {
-                    nextID = q.ListOfComments.Select(aq => q.ID).Max() + 1;
-                }
-            }
+                conn.Open();
 
-            foreach (var q in ListOfQuestions)
-            {
-                if (q.ID.Equals(questionID))
-                {
-                    foreach (var answer in q.ListOfAnswers)
-                    {
-                        if (answer.ID.Equals(answerID))
-                        {
-                            answer.ListOfComments.Add(new Comment(nextID, message, questionID));
-                            return nextID;
-                        }
-                    }
-                }
+                var command = new NpgsqlCommand($"INSERT INTO commentt(answer_id, comment_text, submission_time) VALUES ({answerID},{message},{DateTime.Now})", conn);
+
+                command.ExecuteNonQuery();
             }
-            return nextID;
         }
 
 
-        public void DeleteCommentFromAnswer(int questionID, int answerID, int commentID)
+        public void DeleteCommentFromAnswer(int commentID, int questionID = 0, int answerID = 0)
         {
-            foreach (var q in ListOfQuestions)
+            using (var conn = new NpgsqlConnection(connectingString))
+
             {
-                if (q.ID.Equals(questionID))
-                {
-                    foreach (var answer in q.ListOfAnswers)
-                    {
-                        if (answer.ID.Equals(answerID))
-                        {
-                            foreach (var comment in answer.ListOfComments)
-                            {
-                                if (comment.ID.Equals(commentID))
-                                {
-                                    answer.ListOfComments.Remove(comment);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
+                conn.Open();
+
+                var command = new NpgsqlCommand($"DELETE FROM commentt " +
+                                                $"WHERE comment_id = {commentID}");
+
+                command.ExecuteNonQuery();
             }
 
         }
 
 
-        public void EditCommentForQuestion(int qid, int commentID, string text)
+        public void EditCommentForQuestion(int commentID, string text, int questionID = 0)
         {
-            foreach (var q in ListOfQuestions)
+            using (var conn = new NpgsqlConnection(connectingString))
             {
-                if (q.ID == qid)
-                {
-                    foreach (var comment in q.ListOfComments)
-                    {
-                        if (comment.ID.Equals(commentID))
-                        {
-                            comment.Text = text;
-                        }
-                    }
-                }
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE commentt " +
+                                                $"SET comment_text = {text}" +
+                                                $"WHERE comment_id = {commentID}");
+
+                command.ExecuteNonQuery();
             }
         }
 
-        public void EditCommentForAnswer(int qid, int commentID, int answerID, string text)
+        public void EditCommentForAnswer(string text, int commentID, int answerID = 0, int questionID = 0)
         {
-            foreach (var q in ListOfQuestions)
+            using (var conn = new NpgsqlConnection(connectingString))
             {
-                if (q.ID == qid)
-                {
-                    foreach (var answer in q.ListOfAnswers)
-                    {
-                        if (answer.ID.Equals(answerID))
-                        {
-                            foreach (var comment in answer.ListOfComments)
-                            {
-                                if (comment.ID.Equals(commentID))
-                                {
-                                    comment.Text = text;
-                                }
-                            }
-                        }
-                    }
-                }
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE commentt " +
+                                                $"SET comment_text = {text}" +
+                                                $"WHERE comment_id = {commentID}");
+
+                command.ExecuteNonQuery();
             }
         }
 
