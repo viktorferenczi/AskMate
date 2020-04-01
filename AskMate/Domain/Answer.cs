@@ -13,8 +13,19 @@ namespace AskMate.Domain
         public int UpVotes { get; set; }
         public int DownVotes { get; set; }
         public DateTime PostedDate { get; set; }
-     
-       
+        public int QuestionID { get; set; }
+
+        public Answer(int id, int qid, string message, string image, int vote, int downvote, DateTime date )
+        {
+            ID = id;
+            Text = message; 
+            Image = image;
+            UpVotes = vote;
+            DownVotes = downvote;
+            PostedDate = date;
+            QuestionID = qid;
+
+        }
 
         public Answer(int id, string text, int QaID, string image, DateTime postedDate)
         {

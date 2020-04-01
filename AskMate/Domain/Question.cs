@@ -27,9 +27,9 @@ namespace AskMate.Domain
             ID = id;
             Title = title;
             Text = text;
-            ListOfAnswers = new List<Answer>();
+          
 
-            ListOfComments = new List<Comment>();
+           
 
             if (image != null)
             {
@@ -37,21 +37,20 @@ namespace AskMate.Domain
             }
             PostedDate = postedDate;
         }
-        public Question(int id, string title, string text, string image, int like, int dislike, int numOfMessages, int numOfViews)
+        public Question(int id, string title, string text, string image, int like, int dislike, int numOfViews, DateTime posted)
         {
             ID = id;
             Title = title;
             Text = text;
-            ListOfAnswers = new List<Answer>();
-            ListOfComments = new List<Comment>();
+         
             if (image != null)
             {
                 Image = image;
             }
             Like = like;
             Dislike = dislike;
-            NumOfMessages = numOfMessages;
             NumOfViews = numOfViews;
+            PostedDate = posted;
         }
         public Question()
         {
