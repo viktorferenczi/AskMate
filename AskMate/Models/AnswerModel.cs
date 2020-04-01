@@ -12,7 +12,7 @@ namespace AskMate.Models
         public int DownVotes { get; set; }
         public DateTime PostedDate { get; set; }
         public int QuestionID { get; set; }
-        public List<CommentModel> CommentModels{ get; set; }
+        public List<CommentModel> CommentModels;
 
         public AnswerModel(int id, int qid, string message, string image, int vote, int downvote, DateTime date)
         {
@@ -23,6 +23,7 @@ namespace AskMate.Models
             DownVotes = downvote;
             PostedDate = date;
             QuestionID = qid;
+            CommentModels = new List<CommentModel>();
 
         }
 
@@ -30,7 +31,7 @@ namespace AskMate.Models
         {
             ID = id;
             Text = text;
-
+            CommentModels = new List<CommentModel>();
 
             if (image != null)
             {
@@ -50,7 +51,7 @@ namespace AskMate.Models
             }
             UpVotes = upVotes;
             DownVotes = downVotes;
-
+            CommentModels = new List<CommentModel>();
         }
         public AnswerModel()
         {

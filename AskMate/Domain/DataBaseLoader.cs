@@ -192,7 +192,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time) VALUES ({questionID},'{message}','{image}','{DateTime.Now}')", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time, vote_number,downvote_number) VALUES ({questionID},'{message}','{image}','{DateTime.Now}',0,0)", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -367,7 +367,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO commentt(answer_id, comment_text, submission_time) VALUES ({answerID},'{message}','{DateTime.Now}')", conn);
+                var command = new NpgsqlCommand($"INSERT INTO commentt(answer_id, question_id, comment_text, submission_time) VALUES ({answerID},null,'{message}','{DateTime.Now}')", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -415,5 +415,20 @@ namespace AskMate.Domain
                 command.ExecuteNonQuery();
             }
         }
+
+        public void PlusViewToQuestion(int qid)
+        {
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE question SET view_number = view_number + 1 WHERE question_id = {qid}", conn);
+
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+       
     }
 }

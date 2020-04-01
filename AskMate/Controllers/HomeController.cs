@@ -67,7 +67,7 @@ namespace AskMate.Controllers
 
             if (answermessage != null)
             {
-                _DBloader.AddCommentToAnswer(id, answermessage, Convert.ToInt32(anid));
+                _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage, Convert.ToInt32(anid));
             }
             return View(question);
         }
@@ -76,7 +76,7 @@ namespace AskMate.Controllers
         {
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == id);
-            question.NumOfViews++;
+            _DBloader.PlusViewToQuestion(id);
             return Redirect($"/Home/Question/{id}");
         }
 
@@ -129,6 +129,7 @@ namespace AskMate.Controllers
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == qid);
             _DBloader.DeleteAnswer(id);
+          
             return Redirect($"/Home/Question/{qid}");
         }
 
@@ -248,7 +249,8 @@ namespace AskMate.Controllers
         {
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == questionid);
-            _DBloader.DeleteCommentFromQuestion(questionid, commentid);
+            _DBloader.DeleteCommentFromQuestion(commentid);
+            
             return Redirect($"/Home/Question/{questionid}");
         }
 
