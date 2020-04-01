@@ -104,7 +104,7 @@ namespace AskMate.Controllers
 
         public ActionResult AnswerEditing([FromQuery]int aid, [FromQuery] int qid)
         {
-            return View("AnswerEdit", _DBloader.GetAnswerToQuestion(qid, aid));
+            return View("AnswerEdit", _DBloader.GetAnswerModelToQuestion(aid,qid));
         }
 
      
@@ -116,10 +116,10 @@ namespace AskMate.Controllers
 
             if (text != null)
             {
-                _DBloader.EditAnswer(aid, text, aid);
+                _DBloader.EditAnswer(aid, text);
             }
 
-            var ans = _DBloader.GetAnswerToQuestion(qid, aid); 
+            var ans = _DBloader.GetAnswerModelToQuestion(aid); 
             return View(ans);
         }
 

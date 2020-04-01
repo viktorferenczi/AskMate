@@ -332,6 +332,33 @@ namespace AskMate.Domain
             return answer;
         }
 
+        public AnswerModel GetAnswerModelToQuestion(int aid, int qid = 0)
+        {
+            AnswerModel answermodel = new AnswerModel();
+
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                using (var command = new NpgsqlCommand($"SELECT * FROM answer WHERE answer_id = {aid}", conn))
+                {
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var answer_id = Convert.ToInt32(reader["answer_id"]);
+                        var downvote_number = Convert.ToInt32(reader["downvote_number"]);
+                        var question_id = Convert.ToInt32(reader["question_id"]);
+                        var submission_time = Convert.ToDateTime(reader["submission_time"]);
+                        var vote_number = Convert.ToInt32(reader["vote_number"]);
+                        var answer_text = Convert.ToString(reader["answer_text"]);
+                        var answer_image = Convert.ToString(reader["answer_image"]);
+                        answermodel = new AnswerModel(answer_id, question_id, answer_text, answer_image, vote_number, downvote_number, submission_time);
+                    }
+                }
+            }
+            return answermodel;
+        }
+
 
         public void AddCommentToQuestion(int questionID, string message)
         {
