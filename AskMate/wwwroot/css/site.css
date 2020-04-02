@@ -328,7 +328,7 @@ body {
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,700");
 
-* {
+*{
     font-family: Roboto, sans-serif;
     padding: 0;
     margin: 0;
@@ -347,49 +347,49 @@ body {
 .fadexddd {
 }
 
-    .fadexddd > h3 {
+    .search > h3 {
         font-weight: normal;
     }
 
-    .fadexddd > h1,
-    .fadexddd > h3 {
+.search > h1,
+.search > h3 {
+    color: white;
+    margin-bottom: 15px;
+    text-shadow: 0 1px #0091c2;
+}
+
+.search > div {
+    display: inline-block;
+    position: relative;
+}
+
+    .search > div:after {
+        content: "";
+        background: white;
+        width: 4px;
+        height: 15px;
+        position: absolute;
+        top: 19px;
+        right: -5px;
+        transform: rotate(127deg);
+        box-shadow: 1px 0 #0091c2;
+    }
+
+    .search > div > input {
         color: white;
-        margin-bottom: 15px;
-        text-shadow: 0 1px #0091c2;
+        font-size: 16px;
+        background: transparent;
+        width: 25px;
+        height: 25px;
+        padding: 10px;
+        border: solid 3px white;
+        outline: none;
+        border-radius: 35px;
+        box-shadow: 0 1px #0091c2;
+        transition: width 0.5s;
     }
 
-    .fadexddd > div {
-        display: inline-block;
-        position: relative;
-    }
-
-        .fadexddd > div:after {
-            content: "";
-            background: white;
-            width: 4px;
-            height: 15px;
-            position: absolute;
-            top: 19px;
-            right: -5px;
-            transform: rotate(127deg);
-            box-shadow: 1px 0 #0091c2;
+        .search > div > input:focus,
+        .search > div > input:valid {
+            width: 250px;
         }
-
-        .fadexddd > div > input {
-            color: white;
-            font-size: 16px;
-            background: transparent;
-            width: 25px;
-            height: 25px;
-            padding: 10px;
-            border: solid 3px white;
-            outline: none;
-            border-radius: 35px;
-            box-shadow: 0 1px #0091c2;
-            transition: width 0.5s;
-        }
-
-            .fadexddd > div > input:focus,
-            .fadexddd > div > input:valid {
-                width: 250px;
-            }
