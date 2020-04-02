@@ -14,23 +14,17 @@ namespace AskMate.Models
         public int Edited { get; set; }
         public DateTime SubmissionTime { get; set; }
 
-        //Question comment constructor
-        public Answer_CommentModel(int id, string text, int questionID, DateTime submission)//int edited
+      
+        public Answer_CommentModel(int commmentid, string text, int answerID,  DateTime submission, int Edited)
         {
-            ID = id;
+            ID = commmentid;
             Text = text;
-            //this.Edited = edited
+            AnswerID = answerID; 
             SubmissionTime = submission;
+            this.Edited = Edited; 
         }
-        //Answer comment constructor
-        public Answer_CommentModel(int answerID, int id, string text, DateTime submission)//int edited
-        {
-            ID = id;
-            Text = text;
-            //this.Edited = edited;
-            AnswerID = answerID;
-            SubmissionTime = submission;
-        }
+
+    
         public Answer_CommentModel()
         {
 

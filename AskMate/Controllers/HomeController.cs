@@ -71,8 +71,10 @@ namespace AskMate.Controllers
                 _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage);
             }
 
-           
-            return View(question);
+            var newquestionModel = _DBloader.GetQuestions();
+            var newquestion = questionModel.FirstOrDefault(q => q.ID == id);
+
+            return View(newquestion);
         }
 
         public RedirectResult View(int id)
@@ -126,6 +128,52 @@ namespace AskMate.Controllers
             var ans = _DBloader.GetAnswerModelToQuestion(aid); 
             return View(ans);
         }
+
+        public ActionResult Answer_CommentModelEditing([FromQuery]int aid, [FromQuery] int cid)
+        {
+            return View("Answer_CommentModelEdit", _DBloader.GetCommentModelToAnswer(cid));
+        }
+
+
+
+        public IActionResult Answer_CommentModelEdit([FromForm(Name = "cid")]int cid, [FromForm(Name = "qid")] int qid, [FromForm(Name = "Text")] string text)
+        {
+            var questionModel = _DBloader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+
+            if (text != null)
+            {
+                _DBloader.EditCommentForAnswer(text, cid);
+                _DBloader.PlusEditedForAnswerComment(cid);
+            }
+
+            var comment = _DBloader.GetCommentModelToAnswer(cid);
+            return View(comment);
+        }
+
+        
+        public ActionResult Question_CommentModelEditing([FromQuery]int qid, [FromQuery] int cid)
+        {
+            return View("Question_CommentModelEdit", _DBloader.GetCommentModelToQuestion(cid));
+        }
+
+
+
+        public IActionResult Question_CommentModelEdit([FromForm(Name = "cid")]int cid, [FromForm(Name = "qid")] int qid, [FromForm(Name = "Text")] string text)
+        {
+            var questionModel = _DBloader.GetQuestions();
+            var question = questionModel.FirstOrDefault(q => q.ID == qid);
+
+            if (text != null)
+            {
+                _DBloader.EditCommentForQuestion(cid, text);
+                _DBloader.PlusEditedForQuestionComment(cid);
+            }
+
+            var comment = _DBloader.GetCommentModelToQuestion(cid);
+            return View(comment);
+        }
+
 
 
         public IActionResult DeleteAnswer(int id,int qid)

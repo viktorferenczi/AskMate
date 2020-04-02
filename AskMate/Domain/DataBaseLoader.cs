@@ -87,8 +87,9 @@ namespace AskMate.Domain
                         var cquestion_id = Convert.ToInt32(readercomm["question_id"]);
                         var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
                         var comment_text = Convert.ToString(readercomm["comment_text"]);
+                        var comment_edited = Convert.ToInt32(readercomm["edited_number"]);
 
-                        comment = new Question_CommentModel(comment_id, comment_text, cquestion_id,csubmission_time);
+                        comment = new Question_CommentModel(comment_id, comment_text, cquestion_id,csubmission_time,comment_edited);
                         questioncomments.Add(comment);
                     }
                 }
@@ -108,8 +109,9 @@ namespace AskMate.Domain
                         var canswer_id = Convert.ToInt32(readercomm["answer_id"]);
                         var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
                         var comment_text = Convert.ToString(readercomm["comment_text"]);
+                        var comment_edited = Convert.ToInt32(readercomm["edited_number"]);
 
-                        comment = new Answer_CommentModel(comment_id, comment_text, canswer_id, csubmission_time);
+                        comment = new Answer_CommentModel(comment_id, comment_text, canswer_id, csubmission_time, comment_edited);
                         answercomments.Add(comment);
                     }
                 }
@@ -127,21 +129,23 @@ namespace AskMate.Domain
                     }
                 }
 
+
                 foreach (var question in questions)
                 {
                     foreach (var answer in question.AnswerModels)
                     {
 
-                    
-                        foreach (var comment in answer.CommentModels)
+                        foreach (var comment in answercomments)
                         {
-                            if (question.ID == comment.AnswerID)
+                            if (comment.AnswerID == answer.ID)
                             {
                                 answer.CommentModels.Add(comment);
                             }
                         }
                     }
                 }
+
+
 
                 foreach (var question in questions)
                 {
@@ -262,9 +266,9 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time, vote_number,downvote_number) VALUES ({questionID},'{message}','{image}','{DateTime.Now}',0,0)", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time, vote_number,downvote_number) VALUES ({questionID},'{message}','{image}','{DateTime.Now}',0,0) RETURNING answer_id", conn);
 
-                command.ExecuteNonQuery();
+                command.ExecuteScalar();
             }
         }
 
@@ -455,6 +459,57 @@ namespace AskMate.Domain
             return answermodel;
         }
 
+        public Answer_CommentModel GetCommentModelToAnswer(int cid)
+        {
+            Answer_CommentModel answercommentmodel = new Answer_CommentModel();
+
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                using (var command = new NpgsqlCommand($"SELECT * FROM answer_comment WHERE comment_id = {cid}", conn))
+                {
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var comment_id = Convert.ToInt32(reader["comment_id"]);
+                        var answer_id = Convert.ToInt32(reader["answer_id"]);
+                        var submission_time = Convert.ToDateTime(reader["submission_time"]);
+                        var comment_text = Convert.ToString(reader["comment_text"]);
+                        var edited_number = Convert.ToInt32(reader["edited_number"]);
+                        answercommentmodel = new Answer_CommentModel(comment_id, comment_text, answer_id, submission_time, edited_number);
+                    }
+                }
+            }
+            return answercommentmodel;
+        }
+
+
+        public Question_CommentModel GetCommentModelToQuestion(int cid)
+        {
+            Question_CommentModel questioncomment = new Question_CommentModel();
+
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                using (var command = new NpgsqlCommand($"SELECT * FROM question_comment WHERE comment_id = {cid}", conn))
+                {
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var comment_id = Convert.ToInt32(reader["comment_id"]);
+                        var question_id = Convert.ToInt32(reader["question_id"]);
+                        var submission_time = Convert.ToDateTime(reader["submission_time"]);
+                        var comment_text = Convert.ToString(reader["comment_text"]);
+                        var edited_number = Convert.ToInt32(reader["edited_number"]);
+                        questioncomment = new Question_CommentModel(comment_id, comment_text, question_id, submission_time, edited_number);
+                    }
+                }
+            }
+            return questioncomment;
+        }
+
 
         public void AddCommentToQuestion(int questionID, string message)
         {
@@ -463,7 +518,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO question_comment(question_id, comment_text, submission_time) VALUES ({questionID},'{message}','{DateTime.Now}')", conn);
+                var command = new NpgsqlCommand($"INSERT INTO question_comment(question_id, comment_text, submission_time,edited_number) VALUES ({questionID},'{message}','{DateTime.Now}',0)", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -492,7 +547,7 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO answer_comment(answer_id, comment_text, submission_time) VALUES ({answerID},'{message}','{DateTime.Now}')", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer_comment(answer_id, comment_text, submission_time, edited_number) VALUES ({answerID},'{message}','{DateTime.Now}',0)", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -556,6 +611,32 @@ namespace AskMate.Domain
 
         }
 
-       
+        public void PlusEditedForAnswerComment(int cid)
+        {
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE answer_comment SET edited_number = edited_number + 1 WHERE comment_id = {cid}", conn);
+
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void PlusEditedForQuestionComment(int cid)
+        {
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"UPDATE question_comment SET edited_number = edited_number + 1 WHERE comment_id = {cid}", conn);
+
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+
     }
 }

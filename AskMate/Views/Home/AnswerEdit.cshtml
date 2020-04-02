@@ -10,7 +10,7 @@
     <div class="col-md-4">
         <form asp-action="AnswerEdit" method="post">
             <div class="form-group">
-                <input asp-for="Text" name="Text" class="form-control" value="Type your new answer here" />
+                <input asp-for="Text" name="Text" class="form-control" value="@Model.Text" />
                 <input type="hidden" name="aid" value="@Model.ID" />
                 @*<input type="hidden" name="qid" value="@Model.Question.ID" />*@
             </div>

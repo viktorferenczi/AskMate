@@ -4,54 +4,57 @@
     ViewData["Title"] = "Question";
 }
 
-<div>
-    <h4>Question</h4>
-    <hr />
-    <div style="background-color:#e0efff; margin-top:10px;margin-right:370px; border-radius:7px;padding-left:5px;padding-right:5px; ">
-        <div style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px">
-            <h2 style="float:none">@Model.Title</h2>
+    <div>
+        <h4>Question</h4>
+        <hr />
+        <div style="background-color:#e0efff; margin-top:10px;margin-right:370px; border-radius:7px;padding-left:5px;padding-right:5px; ">
+            <div style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px">
+                <h2 style="float:none">@Model.Title</h2>
+            </div>
+            <h3 style="max-width:720px; float:none;font-size:20px;word-wrap:break-word">@Model.Text</h3>
+            @if (Model.Image != null)
+            {
+                <img src="@Model.Image" style="max-height:500px; max-width: 500px" />
+            }
+            <h3 style="font-size:15px; margin-left:1%; padding-bottom:4px">
+                <a style="margin-left:0px;" href='@Url.Action("Like", new { qid = Model.ID })'><img style="height:16px; width:10px; " src='@Url.Content("~/upvote.png")' /></a>@Model.Like <a style="margin-left:0px;" href='@Url.Action("Dislike", new { qid = Model.ID })'><img style="height:16px; width:10px; " src='@Url.Content("~/downvote.png")' /></a> @Model.Dislike
+            </h3>
         </div>
-        <h3 style="max-width:720px; float:none;font-size:20px;word-wrap:break-word">@Model.Text</h3>
-        @if (Model.Image != null)
+
+        @if (Model.CommentModels.Count != 0)
         {
-            <img src="@Model.Image" style="max-height:500px; max-width: 500px" />
+
+            @foreach (var comment in Model.CommentModels)
+            {
+
+
+                @comment.Text <a>- @comment.Edited times.</a> <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("DeleteCommentFromQuestion", new { commentid = comment.ID, questionid = Model.ID  })'>
+                    <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
+                </a>
+                <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("Question_CommentModelEditing", new { qid = Model.ID, cid = comment.ID })'>
+                    <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
+                </a>
+
+                <br />
+
+
+
+            }
+            <form method="post">
+                <input class="form-control" type="text" name="question_comment" value="" placeholder="Add comment to question" />
+                <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
+            </form>
         }
-        <h3 style="font-size:15px; margin-left:1%; padding-bottom:4px">
-            <a style="margin-left:0px;" href='@Url.Action("Like", new { qid = Model.ID })'><img style="height:16px; width:10px; " src='@Url.Content("~/upvote.png")' /></a>@Model.Like <a style="margin-left:0px;" href='@Url.Action("Dislike", new { qid = Model.ID })'><img style="height:16px; width:10px; " src='@Url.Content("~/downvote.png")' /></a> @Model.Dislike
-        </h3>
+        else
+        {
+            <form method="post">
+                <input class="form-control" type="text" name="question_comment" value="" placeholder="Add comment to question" />
+                <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
+            </form>
+        }
+
+
     </div>
-
-    @if (Model.CommentModels.Count != 0)
-    {
-
-        @foreach (var comment in Model.CommentModels)
-        {
-
-
-            @comment.Text <a>- @comment.Edited times.</a> <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("DeleteCommentFromQuestion", new { commentid = comment.ID, questionid = Model.ID  })'>
-                <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
-            </a>
-
-            <br />
-
-
-
-        }
-        <form method="post">
-            <input class="form-control" type="text" name="question_comment" value="" placeholder="Add comment to question" />
-            <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
-        </form>
-    }
-    else
-    {
-        <form method="post">
-            <input class="form-control" type="text" name="question_comment" value="" placeholder="Add comment to question" />
-            <input type="submit" value="Submit" style="margin-top:10px" class="btn btn-primary" />
-        </form>
-    }
-
-
-</div>
 
 @if (Model.AnswerModels.Count != 0)
 {
@@ -65,14 +68,14 @@
             {
                 <img src="@an.Image" style="max-height:400px; max-width: 400px" />
             }
-        <div>
-            <a style="margin-left:0px; margin-left:1%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new { id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px;margin-left:2%; margin-right:0% " src='@Url.Content("~/delete.png")' /></a>
-            <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("AnswerEditing", new { aid = an.ID, qid = Model.ID })'>
-                <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
-            </a>
+            <div>
+                <a style="margin-left:0px; margin-left:1%;padding-bottom:5px" href='@Url.Action("LikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' /></a>@an.UpVotes <a style="padding-bottom:5px;margin-left:0px;" href='@Url.Action("DislikeAnswer", new { aid = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' /></a> @an.DownVotes <a style="padding-bottom:2px;" href='@Url.Action("DeleteAnswer", new { id = an.ID, qid = Model.ID })'><img style="padding-bottom:2px;height:15px; width:12px;margin-left:2%; margin-right:0% " src='@Url.Content("~/delete.png")' /></a>
+                <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("AnswerEditing", new { aid = an.ID, qid = Model.ID })'>
+                    <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
+                </a>
+            </div>
         </div>
-        </div>
-       
+
 
         @if (an.CommentModels.Count != 0)
         {
@@ -82,6 +85,9 @@
 
                 @comment.Text <a>Edited  @comment.Edited times.</a> <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("DeleteCommentFromAnswer", new { commentid = comment.ID, questionid = Model.ID, answerid = an.ID })'>
                     <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
+                </a>
+                <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("Answer_CommentModelEditing", new { aid = an.ID, cid = comment.ID })'>
+                    <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
                 </a>
                 <br />
 
