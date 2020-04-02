@@ -20,6 +20,10 @@ namespace AskMate.Models
         public List<Question_CommentModel> CommentModels;
         public List<Answer_CommentModel> AnswerCommentModels;
 
+       
+
+        
+
 
         public int MessageNumber { get; set; }
 

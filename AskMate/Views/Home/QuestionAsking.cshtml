@@ -18,7 +18,7 @@
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="Text" placeholder="Your question goes here.." style="width:165%; min-height:350px" maxlength="300" required></textarea>
                 <div class=" text-danger">   Maximum 300 character!</div>
             </div>
-            
+
             <div class="form-group">
                 <label for="Image" class="control-label"></label>
                 <input for="Image" type="text" name="Image" class="form-control" placeholder="Optional: Insert image url" />
@@ -32,8 +32,18 @@
     </div>
 </div>
 
+
+
+
+<center>
+    <input type="text" value="" data-role="tagsinput" placeholder="Add tags" />
+</center>
+
+
+
+
 <div>
-    <a asp-action="Index">Back to Home</a> | 
+    <a asp-action="Index">Back to Home</a> |
     <a asp-action="QuestionList">View already asked questions</a>
 </div>
 <ul class="circles" style="pointer-events:none;  ">
@@ -92,4 +102,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    
+   
 }

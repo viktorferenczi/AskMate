@@ -40,6 +40,17 @@ namespace AskMate.Controllers
             return View(_DBloader.GetQuestions());
         }
 
+        public ActionResult Search(string search)
+        {
+            if (search != null)
+            {
+                return View("QuestionList", _DBloader.GetQuestions().Where(x => x.Title.Contains(search) || x.Text.Contains(search) || search == null).ToList());
+            }
+            return View("QuestionList", _DBloader.GetQuestions());
+
+
+        }
+
         public IActionResult QuestionAsking()
         {
             return View();
