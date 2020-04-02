@@ -12,7 +12,7 @@ namespace AskMate.Domain
         Question GetQuestion(int questionId);
         public void AddQuestion(string title, string text,string image);
         public int CountAnswers(int questionId);
-        public void AddAnswer(int questionId, string message,string image);
+        public int AddAnswer(int questionId, string message,string image);
         public void DeleteQuestion(int ID);
         public void DeleteAnswer(int ID);
         public void EditQuestion(int qid, string title, string text);

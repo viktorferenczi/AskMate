@@ -6,11 +6,6 @@
 
 
 
-@using (Html.BeginForm("Search", "Home", FormMethod.Get))
-{
-    @Html.TextBox("search")
-    <input type="submit" value="Search" />
-}
 
 
 
@@ -20,58 +15,65 @@
 @if (Model.Count != 0)
 {
 
-<div class="SortButtons" style="background-color:#c6e2ff; border-radius:7px;margin-right:30px; padding-left:20px; height:40px; padding-top:4px; font-size:17px; margin-bottom:20px">
-    <div style="float:left; margin-left:30px; margin-top:1px; padding-left:5px;padding-right:5px;border-radius:5px; background-color:#f5faff">
-        <a href='@Url.Action("SortingByTitleDesc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
-        </a>
 
-        <a href='@Url.Action("SortingByTitleAsc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
-        </a>
-        Title
+    @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+    {
+        @Html.TextBox("search")
+        <input type="submit" value="Search" placeholder="Search for keyword" />
+    }
+
+    <div class="SortButtons" style="background-color:#c6e2ff; border-radius:7px;margin-right:30px; padding-left:20px; height:40px; padding-top:4px; font-size:17px; margin-bottom:20px">
+        <div style="float:left; margin-left:30px; margin-top:1px; padding-left:5px;padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a href='@Url.Action("SortingByTitleDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByTitleAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Title
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByLikesDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Like
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByCommentsAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Comment
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByDateDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByDateAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Date
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByViewsDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByViewsAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Views
+        </div>
     </div>
-    <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
-        <a style="margin-left:5px" href='@Url.Action("SortingByLikesDesc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
-        </a>
-
-        <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
-        </a>
-        Like
-    </div>
-    <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
-        <a style="margin-left:5px" href='@Url.Action("SortingByCommentsAsc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
-        </a>
-
-        <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
-        </a>
-        Comment
-    </div>
-    <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
-        <a style="margin-left:5px" href='@Url.Action("SortingByDateDesc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
-        </a>
-
-        <a href='@Url.Action("SortingByDateAsc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
-        </a>
-        Date
-    </div>
-    <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
-        <a style="margin-left:5px" href='@Url.Action("SortingByViewsDesc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
-        </a>
-
-        <a href='@Url.Action("SortingByViewsAsc", new { Model })'>
-            <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
-        </a>
-        Views
-    </div>  
-</div>
 
 
     <ul style="list-style-type: none ; margin-right:30px">

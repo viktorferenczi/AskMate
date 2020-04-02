@@ -260,16 +260,19 @@ namespace AskMate.Domain
 
 
 
-        public void AddAnswer(int questionID, string message, string image)
+        public int AddAnswer(int questionID, string message, string image)
         {
+            int res;
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
 
                 var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time, vote_number,downvote_number) VALUES ({questionID},'{message}','{image}','{DateTime.Now}',0,0) RETURNING answer_id", conn);
 
-                command.ExecuteScalar();
+               
+                res = Convert.ToInt32(command.ExecuteScalar());
             }
+            return res;
         }
 
 
@@ -281,6 +284,7 @@ namespace AskMate.Domain
 
                 var command = new NpgsqlCommand($"DELETE FROM question WHERE question_id = {ID}", conn);
 
+
                 command.ExecuteNonQuery();
             }
         }
@@ -291,7 +295,7 @@ namespace AskMate.Domain
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
-
+               
                 var command = new NpgsqlCommand($"DELETE FROM answer WHERE answer_id = {ID}", conn);
 
                 command.ExecuteNonQuery();
@@ -564,6 +568,22 @@ namespace AskMate.Domain
                                                 $"WHERE comment_id = {commentID}", conn);
 
                
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+
+        public void DeleteCommentFromAnswerWithAnswerID(int answerID)
+        {
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                var command = new NpgsqlCommand($"DELETE FROM answer_comment " +
+                                                $"WHERE answer_id = {answerID} ", conn);
+
+
 
                 command.ExecuteNonQuery();
             }

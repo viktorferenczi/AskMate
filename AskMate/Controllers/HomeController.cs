@@ -88,6 +88,8 @@ namespace AskMate.Controllers
             return View(newquestion);
         }
 
+     
+
         public RedirectResult View(int id)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -191,6 +193,7 @@ namespace AskMate.Controllers
         {
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == qid);
+            _DBloader.DeleteCommentFromAnswerWithAnswerID(id);
             _DBloader.DeleteAnswer(id);
             _DBloader.MinusNumberOfMessages(qid);
           
