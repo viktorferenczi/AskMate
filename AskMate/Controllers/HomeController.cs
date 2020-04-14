@@ -62,7 +62,7 @@ namespace AskMate.Controllers
             return View("QuestionList",_DBloader.GetQuestions());
         }
      
-        [HttpPost]
+        
         public IActionResult Question(int id, [FromForm(Name = "comment")] string comment, string image, [FromForm(Name = "question_comment")] string message, [FromForm(Name = "anid")] string anid, [FromForm(Name = "answer_message")] string answermessage)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -87,7 +87,7 @@ namespace AskMate.Controllers
             var newquestion = questionModel.FirstOrDefault(q => q.ID == id);
            
             
-            return View("Question",newquestion);
+            return View(newquestion);
         }
 
        // respond.redirect, actionname, teljes eleresi ut cshtml

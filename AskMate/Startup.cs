@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AskMate.Domain;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,14 @@ namespace AskMate
             
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(typeof(DataBaseLoader), new DataBaseLoader());
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+                //CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                //{
+                //    options.LoginPath = "/Account/Index";
+                //    options.LogoutPath = "/Account/Logout";
+                //});
+
         }
 
 
@@ -51,6 +60,7 @@ namespace AskMate
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

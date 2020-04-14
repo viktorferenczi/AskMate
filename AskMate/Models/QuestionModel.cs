@@ -16,7 +16,10 @@ namespace AskMate.Models
         public int NumOfMessages { get; set; }
         public int NumOfViews { get; set; }
         public DateTime PostedDate { get; set; }
+
         public List<AnswerModel> AnswerModels;
+
+
         public List<Question_CommentModel> CommentModels;
         public List<Answer_CommentModel> AnswerCommentModels;
 
