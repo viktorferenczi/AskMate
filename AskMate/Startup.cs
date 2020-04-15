@@ -29,6 +29,7 @@ namespace AskMate
             
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(typeof(DataBaseLoader), new DataBaseLoader());
+            services.AddSingleton(typeof(IUserService), new InMemoryUserService());
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
                 //CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -59,8 +60,8 @@ namespace AskMate
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,52 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AskMate.Domain;
-using AskMate.Models;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using AskMate.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AskMate.Controllers
 {
-  
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
         private readonly DataBaseLoader _DBloader;
+        private readonly IUserService _userService;
 
-        public AccountController(ILogger<AccountController> logger, DataBaseLoader DBloader)
+        public AccountController(ILogger<AccountController> logger, DataBaseLoader DBloader, IUserService userService)
         {
-            _logger = logger;
-            _DBloader = DBloader;
+            _userService = userService;
         }
-    
-       [HttpGet]
+
         public IActionResult Login()
         {
             return View();
         }
 
 
-        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> LoginAsync([FromForm] string email, [FromForm] string password)
         {
-
-            if ("test@test.com" != email || "test" != password)
+            UserModel user = _userService.Login(email, password);
+            if (user == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
-
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, email)
-               
+                new Claim(ClaimTypes.Email, user.Email)
+
             };
 
             var claimsIdentity = new ClaimsIdentity(
@@ -82,6 +76,13 @@ namespace AskMate.Controllers
                 authProperties);
 
             return RedirectToAction("Index", "Profile");
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
         }
 
 

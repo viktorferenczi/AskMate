@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using AskMate.Domain;
 using AskMate.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace AskMate.Controllers
 {
@@ -16,22 +17,26 @@ namespace AskMate.Controllers
     {
         private readonly ILogger<ProfileController> _logger;
         private readonly DataBaseLoader _DBloader;
+        private readonly IUserService _userService;
 
-        public ProfileController(ILogger<ProfileController> logger, DataBaseLoader DBloader)
+        public ProfileController(ILogger<ProfileController> logger, DataBaseLoader DBloader, IUserService userService )
         {
             _logger = logger;
             _DBloader = DBloader;
+            _userService = userService;
         }
     
        
         public IActionResult Index()
         {
-            
+            var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+            UserModel user = _userService.GetOne(email);
             return View(new UserModel
             {
-                Email = "asd@asd.com",
-                Password = "valami2",
-            });
+                Id = user.Id,
+                Email = user.Email,
+                Password = user.Password,
+            }); 
         }
 
     }
