@@ -11,5 +11,7 @@ namespace AskMate.Domain
         public List<UserModel> GetAll();
         public UserModel GetOne(string email);
         public UserModel Login(string email, string password);
+        public UserModel Register(string email, string password);
+        public void AddUser(UserModel user);
     }
 }

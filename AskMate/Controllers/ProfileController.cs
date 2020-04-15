@@ -31,12 +31,7 @@ namespace AskMate.Controllers
         {
             var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
             UserModel user = _userService.GetOne(email);
-            return View(new UserModel
-            {
-                Id = user.Id,
-                Email = user.Email,
-                Password = user.Password,
-            }); 
+            return View( new UserModel( user.Id, user.Email,user.Password )); 
         }
 
     }

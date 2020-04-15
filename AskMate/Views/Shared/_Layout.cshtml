@@ -16,9 +16,15 @@
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="margin-right:650px">
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="margin-right:750px">
                         <div style="float:right">
-                            <a class="btn btn-outline-primary" role="button" asp-controller="Home" asp-area="" asp-action="Privacy" style="margin-left:5px">Privacy</a>
+                            <a class="btn btn-outline-primary" role="button" asp-controller="Account" asp-area="" asp-action="Logout" style="margin-left:5px;">Logout</a>
+                        </div>
+                        <div style="float:right">
+                            <a class="btn btn-outline-primary" role="button" asp-controller="Account" asp-area="" asp-action="Register" style="margin-left:5px;">Register</a>
+                        </div>
+                        <div style="float:right">
+                            <a class="btn btn-outline-primary" role="button" asp-controller="Home" asp-area="" asp-action="Privacy" style="margin-left:5px; margin-right:300px">Privacy</a>
                         </div>
                         <div style="float:right">
                             <a class="btn btn-outline-primary" role="button" asp-controller="Home" asp-area="" asp-action="QuestionList" style="margin-left:5px">Questions</a>
@@ -27,13 +33,10 @@
                             <a class="btn btn-outline-primary" role="button" asp-controller="Home" asp-area="" asp-action="QuestionAsking" style="margin-left:5px">Add question</a>
                         </div>
                         <div style="float:right">
-                            <a class="btn btn-outline-primary" role="button" asp-controller="Profile" asp-area="" asp-action="Index" style="margin-left:5px;">Profile</a>
-                        </div>
-                        <div style="float:right">
                             <a class="btn btn-outline-primary" role="button" asp-controller="Home" asp-area="" asp-action="Index" style="margin-left:5px;">Home</a>
                         </div>
                         <div style="float:right">
-                            <a class="btn btn-outline-primary" role="button" asp-controller="Account" asp-area="" asp-action="Logout" style="margin-left:5px;">Logout</a>
+                            <a class="btn btn-outline-primary" role="button" asp-controller="Profile" asp-area="" asp-action="Index" style="margin-left:5px;">Profile</a>
                         </div>
                     </div>
                 </div>

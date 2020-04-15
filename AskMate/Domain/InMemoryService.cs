@@ -10,12 +10,7 @@ namespace AskMate.Domain
     {
         private List<UserModel> _users = new List<UserModel>();
 
-        public InMemoryUserService()
-        {
-           _users.Add(new UserModel{Id = 1, Email = "user1", Password = "user"});
-           _users.Add(new UserModel{Id = 2, Email = "user2", Password = "user" });
-           _users.Add(new UserModel{Id = 3, Email = "user3", Password = "user" });
-        }
+        public InMemoryUserService(){}
         public List<UserModel> GetAll()
         {
             return _users;
@@ -39,6 +34,17 @@ namespace AskMate.Domain
                 return null;
             }
             return user;
+        }
+
+        public UserModel Register(string email, string password)
+        {
+            string id = Guid.NewGuid().ToString();
+            UserModel user = new UserModel(id, email, password);
+            return user;   
+        }
+        public void AddUser(UserModel user)
+        {
+            _users.Add(user);
         }
     }
 

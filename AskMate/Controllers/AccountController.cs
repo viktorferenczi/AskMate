@@ -26,7 +26,7 @@ namespace AskMate.Controllers
         {
             return View();
         }
-
+        
 
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromForm] string email, [FromForm] string password)
@@ -82,9 +82,20 @@ namespace AskMate.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public IActionResult Register()
+        {
 
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Register([FromForm] string email, [FromForm] string password)
+        {
+            _userService.AddUser(_userService.Register(email, password));
+            return RedirectToAction("Index", "Profile");
+        }
 
     }
 }
