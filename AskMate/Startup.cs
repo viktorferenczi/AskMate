@@ -30,6 +30,7 @@ namespace AskMate
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(typeof(DataBaseLoader), new DataBaseLoader());
             services.AddSingleton(typeof(IUserService), new InMemoryUserService());
+            services.AddSingleton(typeof(InDataBaseService), new InDataBaseService());
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
                 //CookieAuthenticationDefaults.AuthenticationScheme, options =>

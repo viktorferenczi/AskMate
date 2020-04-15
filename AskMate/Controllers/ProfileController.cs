@@ -30,8 +30,12 @@ namespace AskMate.Controllers
         public IActionResult Index()
         {
             var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
-            UserModel user = _userService.GetOne(email);
-            return View( new UserModel( user.Id, user.Email,user.Password )); 
+            User user = _userService.GetOne(email);
+            if (user != null)
+            {
+                return View(new User(user.Id, user.Email, user.Password));
+            }
+            return RedirectToAction("Login", "Account");
         }
 
     }

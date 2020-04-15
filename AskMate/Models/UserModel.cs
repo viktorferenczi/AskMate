@@ -7,15 +7,21 @@ namespace AskMate.Models
 {
     public class UserModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public List<QuestionModel> UserQuestions;
+        public List<AnswerModel> UserAnswers;
+        public List<Question_CommentModel> UserQuestionComments;
+        public List<Answer_CommentModel> UserAnswerComments;
 
-        public UserModel(string id, string email, string password)
+        public UserModel(int id, string email, string password)
         {
             Id = id;
             Email = email;
             Password = password;
         }
+
+        public UserModel() { }
     }
 }

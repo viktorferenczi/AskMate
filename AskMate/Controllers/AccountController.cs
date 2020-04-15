@@ -16,10 +16,12 @@ namespace AskMate.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly DataBaseLoader _DBloader;
         private readonly IUserService _userService;
+        private readonly InDataBaseService _userDatabaseService;
 
-        public AccountController(ILogger<AccountController> logger, DataBaseLoader DBloader, IUserService userService)
+        public AccountController(ILogger<AccountController> logger, DataBaseLoader DBloader, IUserService userService, InDataBaseService _userDatabaseService)
         {
             _userService = userService;
+            this._userDatabaseService = _userDatabaseService;
         }
 
         public IActionResult Login()
@@ -31,7 +33,7 @@ namespace AskMate.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromForm] string email, [FromForm] string password)
         {
-            UserModel user = _userService.Login(email, password);
+            UserModel user = _userDatabaseService.Login(email, password);
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -77,6 +79,7 @@ namespace AskMate.Controllers
 
             return RedirectToAction("Index", "Profile");
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
@@ -84,15 +87,18 @@ namespace AskMate.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+
         [HttpGet]
         public IActionResult Register()
         {
-
+            
             return View();
         }
+
         [HttpPost]
         public IActionResult Register([FromForm] string email, [FromForm] string password)
         {
+            _userDatabaseService.RegisterIntoDatabase(email, password);
             _userService.AddUser(_userService.Register(email, password));
             return RedirectToAction("Index", "Profile");
         }

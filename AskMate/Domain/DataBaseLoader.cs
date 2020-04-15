@@ -21,6 +21,7 @@ namespace AskMate.Domain
 
         public List<QuestionModel> GetQuestions()
         {
+            List<UserModel> users = new List<UserModel>();
             List<QuestionModel> questions = new List<QuestionModel>();
             List<AnswerModel> answers = new List<AnswerModel>();
             List<Question_CommentModel> questioncomments = new List<Question_CommentModel>();
@@ -45,8 +46,9 @@ namespace AskMate.Domain
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
                         var question_messagenumber = Convert.ToInt32(reader["message_number"]);
+                        var user_id = Convert.ToInt32(reader["userid"]);
 
-                        questionModel = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time, question_messagenumber);
+                        questionModel = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time, question_messagenumber, user_id);
                         questions.Add(questionModel);
                     }
                 }
@@ -68,7 +70,8 @@ namespace AskMate.Domain
                         var avote_number = Convert.ToInt32(readerans["vote_number"]);
                         var answer_text = Convert.ToString(readerans["answer_text"]);
                         var answer_image = Convert.ToString(readerans["answer_image"]);
-                        answer = new AnswerModel(answer_id, aquestion_id, answer_text, answer_image, avote_number, adownvote_number, asubmission_time);
+                        var user_id = Convert.ToInt32(readerans["userid"]);
+                        answer = new AnswerModel(answer_id, aquestion_id, answer_text, answer_image, avote_number, adownvote_number, asubmission_time, user_id);
                         answers.Add(answer);
                     }
                 }
@@ -88,8 +91,9 @@ namespace AskMate.Domain
                         var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
                         var comment_text = Convert.ToString(readercomm["comment_text"]);
                         var comment_edited = Convert.ToInt32(readercomm["edited_number"]);
+                        var user_id = Convert.ToInt32(readercomm["userid"]);
 
-                        comment = new Question_CommentModel(comment_id, comment_text, cquestion_id,csubmission_time,comment_edited);
+                        comment = new Question_CommentModel(comment_id, comment_text, cquestion_id,csubmission_time,comment_edited, user_id);
                         questioncomments.Add(comment);
                     }
                 }
@@ -110,12 +114,31 @@ namespace AskMate.Domain
                         var csubmission_time = Convert.ToDateTime(readercomm["submission_time"]);
                         var comment_text = Convert.ToString(readercomm["comment_text"]);
                         var comment_edited = Convert.ToInt32(readercomm["edited_number"]);
+                        var user_id = Convert.ToInt32(readercomm["userid"]);
 
-                        comment = new Answer_CommentModel(comment_id, comment_text, canswer_id, csubmission_time, comment_edited);
+                        comment = new Answer_CommentModel(comment_id, comment_text, canswer_id, csubmission_time, comment_edited, user_id);
                         answercomments.Add(comment);
                     }
                 }
 
+                conn.Close();
+
+                conn.Open();
+                using (var command = new NpgsqlCommand($"SELECT * FROM users", conn))
+                {
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        UserModel user = new UserModel();
+                        var user_id = Convert.ToInt32(reader["userid"]);
+                        var user_email = Convert.ToString(reader["user_email"]);
+                        var user_pass = Convert.ToString(reader["user_password"]);
+
+                        user = new UserModel(user_id, user_email, user_pass);
+                        users.Add(user);
+                    }
+                }
                 conn.Close();
 
                 foreach (var question in questions)
@@ -154,6 +177,51 @@ namespace AskMate.Domain
                         if (question.ID == comment.QuestionID)
                         {
                             question.CommentModels.Add(comment);
+                        }
+                    }
+                }
+
+                foreach (var user in users)
+                {
+                    foreach (var question in questions)
+                    {
+                        if (question.UserID == user.Id)
+                        {
+                            user.UserQuestions.Add(question);
+                        }
+                    }
+                }
+
+
+                foreach (var user in users)
+                {
+                    foreach (var answer in answers)
+                    {
+                        if (answer.UserID == user.Id)
+                        {
+                            user.UserAnswers.Add(answer);
+                        }
+                    }
+                }
+
+                foreach (var user in users)
+                {
+                    foreach (var answercomment in answercomments)
+                    {
+                        if (answercomment.UserID == user.Id)
+                        {
+                            user.UserAnswerComments.Add(answercomment);
+                        }
+                    }
+                }
+
+                foreach (var user in users)
+                {
+                    foreach (var questioncomment in questioncomments)
+                    {
+                        if (questioncomment.UserID == user.Id)
+                        {
+                            user.UserQuestionComments.Add(questioncomment);
                         }
                     }
                 }
@@ -221,6 +289,7 @@ namespace AskMate.Domain
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
                         var question_messagenummber = Convert.ToInt32(reader["message_number"]);
+                 
                         question = new Question(question_id, question_title, question_text, question_image, vote_number,downvote_number,view_number, submission_time,question_messagenummber);
                     }
                 }
@@ -249,7 +318,8 @@ namespace AskMate.Domain
                         var question_text = Convert.ToString(reader["question_text"]);
                         var question_image = Convert.ToString(reader["question_image"]);
                         var question_messagenummber = Convert.ToInt32(reader["message_number"]);
-                        question = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time, question_messagenummber);
+                        var user_id = Convert.ToInt32(reader["userid"]);
+                        question = new QuestionModel(question_id, question_title, question_text, question_image, vote_number, downvote_number, view_number, submission_time, question_messagenummber, user_id);
                     }
                 }
             }
@@ -456,7 +526,8 @@ namespace AskMate.Domain
                         var vote_number = Convert.ToInt32(reader["vote_number"]);
                         var answer_text = Convert.ToString(reader["answer_text"]);
                         var answer_image = Convert.ToString(reader["answer_image"]);
-                        answermodel = new AnswerModel(answer_id, question_id, answer_text, answer_image, vote_number, downvote_number, submission_time);
+                        var user_id = Convert.ToInt32(reader["userid"]);
+                        answermodel = new AnswerModel(answer_id, question_id, answer_text, answer_image, vote_number, downvote_number, submission_time, user_id);
                     }
                 }
             }
@@ -481,7 +552,8 @@ namespace AskMate.Domain
                         var submission_time = Convert.ToDateTime(reader["submission_time"]);
                         var comment_text = Convert.ToString(reader["comment_text"]);
                         var edited_number = Convert.ToInt32(reader["edited_number"]);
-                        answercommentmodel = new Answer_CommentModel(comment_id, comment_text, answer_id, submission_time, edited_number);
+                        var user_id = Convert.ToInt32(reader["userid"]);
+                        answercommentmodel = new Answer_CommentModel(comment_id, comment_text, answer_id, submission_time, edited_number, user_id);
                     }
                 }
             }
@@ -507,7 +579,8 @@ namespace AskMate.Domain
                         var submission_time = Convert.ToDateTime(reader["submission_time"]);
                         var comment_text = Convert.ToString(reader["comment_text"]);
                         var edited_number = Convert.ToInt32(reader["edited_number"]);
-                        questioncomment = new Question_CommentModel(comment_id, comment_text, question_id, submission_time, edited_number);
+                        var user_id = Convert.ToInt32(reader["userid"]);
+                        questioncomment = new Question_CommentModel(comment_id, comment_text, question_id, submission_time, edited_number, user_id);
                     }
                 }
             }

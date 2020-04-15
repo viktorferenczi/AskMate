@@ -8,10 +8,10 @@ namespace AskMate.Domain
 {
     public interface IUserService
     {
-        public List<UserModel> GetAll();
-        public UserModel GetOne(string email);
-        public UserModel Login(string email, string password);
-        public UserModel Register(string email, string password);
-        public void AddUser(UserModel user);
+        public List<User> GetAll();
+        public User GetOne(string email);
+        public User Login(string email, string password);
+        public User Register(string email, string password);
+        public void AddUser(User user);
     }
 }
