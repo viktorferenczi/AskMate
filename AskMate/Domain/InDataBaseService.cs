@@ -250,8 +250,10 @@ namespace AskMate.Domain
             {
                 conn.Open();
 
-                using (var command = new NpgsqlCommand($"SELECT * FROM users WHERE user_email = {email} AND user_password = {password}", conn))
+                using (var command = new NpgsqlCommand("SELECT * FROM users WHERE user_email = @useremail AND user_password = @userpassword", conn))
                 {
+                    command.Parameters.AddWithValue("useremail", email);
+                    command.Parameters.AddWithValue("userpassword", password);
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
@@ -265,6 +267,33 @@ namespace AskMate.Domain
             }
             return user;
            
+        }
+
+        public UserModel GetOne(string email)
+        {
+
+            UserModel user = new UserModel();
+            using (var conn = new NpgsqlConnection(connectingString))
+            {
+                conn.Open();
+
+                using (var command = new NpgsqlCommand("SELECT * FROM users WHERE user_email = @useremail", conn))
+                {
+                    command.Parameters.AddWithValue("useremail", email);
+                   
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+
+                        var user_id = Convert.ToInt32(reader["userid"]);
+                        var user_email = Convert.ToString(reader["user_email"]);
+                        var user_pass = Convert.ToString(reader["user_password"]);
+                        user = new UserModel(user_id, user_email, user_pass);
+                    }
+                }
+            }
+            return user;
+
         }
 
         public UserModel Login(string email, string password)
@@ -296,8 +325,9 @@ namespace AskMate.Domain
 
             conn.Open();
 
-            var command = new NpgsqlCommand($"INSERT INTO users (user_email,user_password) VALUES ('{email}','{password}'", conn);
-
+            var command = new NpgsqlCommand($"INSERT INTO users (user_email,user_password) VALUES (@email,@pass)", conn);
+            command.Parameters.AddWithValue("email", email);
+            command.Parameters.AddWithValue("pass", password);
             command.ExecuteNonQuery();
             conn.Close();
 
