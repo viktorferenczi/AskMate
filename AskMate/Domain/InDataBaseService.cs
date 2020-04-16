@@ -135,7 +135,7 @@ namespace AskMate.Domain
                     while (reader.Read())
                     {
                         UserModel user = new UserModel();
-                        var user_id = Convert.ToInt32(reader["user_id"]);
+                        var user_id = Convert.ToInt32(reader["userid"]);
                         var user_email = Convert.ToString(reader["user_email"]);
                         var user_pass = Convert.ToString(reader["user_password"]);
 

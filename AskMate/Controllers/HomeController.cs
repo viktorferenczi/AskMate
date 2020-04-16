@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AskMate.Domain;
 using AskMate.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AskMate.Controllers
 {
@@ -14,13 +16,16 @@ namespace AskMate.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly DataBaseLoader _DBloader;
+        private readonly InDataBaseService _DataBaseservice;
 
-        public HomeController(ILogger<HomeController> logger, DataBaseLoader DBloader)
+
+        public HomeController(ILogger<HomeController> logger, DataBaseLoader DBloader, InDataBaseService _DataBaseservice)
         {
             _logger = logger;
             _DBloader = DBloader;
+            this._DataBaseservice = _DataBaseservice;
         }
-    
+
 
         public IActionResult Index()
         {
@@ -31,7 +36,7 @@ namespace AskMate.Controllers
         }
 
         public IActionResult Privacy()
-        {            
+        {
             return View();
         }
 
@@ -51,36 +56,48 @@ namespace AskMate.Controllers
 
         }
 
+        [Authorize]
         public IActionResult QuestionAsking()
         {
             return View();
         }
 
+
         public IActionResult AskQuestion([FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text, [FromForm(Name = "Image")] string image)
         {
-            _DBloader.AddQuestion(title, text, image);
-            return View("QuestionList",_DBloader.GetQuestions());
+
+
+            var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+            UserModel user = _DataBaseservice.GetOne(email);
+
+            _DBloader.AddQuestion(title, text, image, user.Id);
+            return View("QuestionList", _DBloader.GetQuestions());
         }
      
-        
+        [Authorize]
         public IActionResult Question(int id, [FromForm(Name = "comment")] string comment, string image, [FromForm(Name = "question_comment")] string message, [FromForm(Name = "anid")] string anid, [FromForm(Name = "answer_message")] string answermessage)
         {
             var questionModel = _DBloader.GetQuestions();
             var question = questionModel.FirstOrDefault(q => q.ID == id);
-            if (comment != null)
+            var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+            UserModel user = _DataBaseservice.GetOne(email);
+            if (comment != null && email != null)
             {
-               _DBloader.AddAnswer(id, comment,image);
+                _DBloader.AddAnswer(id, comment,image,user.Id);
                 _DBloader.PlusNumberOfMessages(id);
             }
+          
 
             if (message != null)
             {
-                _DBloader.AddCommentToQuestion(id, message);
+                _DBloader.AddCommentToQuestion(id, message,user.Id);
             }
 
             if (answermessage != null)
             {
-                _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage);
+                _DBloader.AddCommentToAnswer(Convert.ToInt32(anid), answermessage,user.Id);
             }
 
             var newquestionModel = _DBloader.GetQuestions();
@@ -101,14 +118,15 @@ namespace AskMate.Controllers
             return Redirect($"/Home/Question/{id}");
         }
 
+        [Authorize]
         public IActionResult Delete(int id)
         {
             _DBloader.DeleteQuestion(id);
             return Redirect("/Home/QuestionList");
         }
 
-       
 
+        [Authorize]
         public IActionResult QuestionEdit(int id, [FromForm(Name = "Title")] string title, [FromForm(Name = "Text")] string text)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -124,6 +142,7 @@ namespace AskMate.Controllers
             return View(question);
         }
 
+        [Authorize]
         public ActionResult AnswerEditing([FromQuery]int aid, [FromQuery] int qid)
         {
             return View("AnswerEdit", _DBloader.GetAnswerModelToQuestion(aid,qid));
@@ -144,7 +163,7 @@ namespace AskMate.Controllers
             var ans = _DBloader.GetAnswerModelToQuestion(aid); 
             return View(ans);
         }
-
+        [Authorize]
         public ActionResult Answer_CommentModelEditing([FromQuery]int aid, [FromQuery] int cid)
         {
             return View("Answer_CommentModelEdit", _DBloader.GetCommentModelToAnswer(cid));
@@ -159,6 +178,9 @@ namespace AskMate.Controllers
 
             if (text != null)
             {
+                var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+              
+
                 _DBloader.EditCommentForAnswer(text, cid);
                 _DBloader.PlusEditedForAnswerComment(cid);
             }
@@ -167,7 +189,7 @@ namespace AskMate.Controllers
             return View(comment);
         }
 
-        
+        [Authorize]
         public ActionResult Question_CommentModelEditing([FromQuery]int qid, [FromQuery] int cid)
         {
             return View("Question_CommentModelEdit", _DBloader.GetCommentModelToQuestion(cid));
@@ -191,7 +213,7 @@ namespace AskMate.Controllers
         }
 
 
-
+        [Authorize]
         public IActionResult DeleteAnswer(int id,int qid)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -203,6 +225,7 @@ namespace AskMate.Controllers
             return Redirect($"/Home/Question/{qid}");
         }
 
+        [Authorize]
         public IActionResult Like(int qid)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -210,6 +233,8 @@ namespace AskMate.Controllers
             _DBloader.Like(qid);
             return Redirect($"/Home/Question/{qid}");
         }
+
+        [Authorize]
         public IActionResult Dislike(int qid)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -218,7 +243,7 @@ namespace AskMate.Controllers
             return Redirect($"/Home/Question/{qid}");
         }
 
-
+        [Authorize]
         public IActionResult LikeAnswer(int qid, int aid)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -226,6 +251,8 @@ namespace AskMate.Controllers
             _DBloader.LikeAnswer(aid,qid);
             return Redirect($"/Home/Question/{qid}");
         }
+
+        [Authorize]
         public IActionResult DislikeAnswer(int qid, int aid)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -314,7 +341,7 @@ namespace AskMate.Controllers
             return View("QuestionList", List);
         }
 
-
+        [Authorize]
         public IActionResult DeleteCommentFromQuestion(int commentid, int questionid)
         {
             var questionModel = _DBloader.GetQuestions();
@@ -324,7 +351,7 @@ namespace AskMate.Controllers
             return Redirect($"/Home/Question/{questionid}");
         }
 
-
+        [Authorize]
         public IActionResult DeleteCommentFromAnswer(int commentid, int questionid, int answerid)
         {
             var questionModel = _DBloader.GetQuestions();

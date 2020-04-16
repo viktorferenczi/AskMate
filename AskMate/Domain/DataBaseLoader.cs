@@ -1,4 +1,5 @@
 ﻿using AskMate.Models;
+using Microsoft.AspNetCore.Http;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -231,13 +232,15 @@ namespace AskMate.Domain
         }
 
 
-        public void AddQuestion(string title, string text, string image)
+        public void AddQuestion(string title, string text, string image, int userid)
         {
             var conn = new NpgsqlConnection(connectingString);
-            
+
+         
+
             conn.Open();
                 
-            var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time, view_number,vote_number,downvote_number, message_number) VALUES ('{title}','{text}','{image}','{DateTime.Now}',0,0,0,0)", conn);
+            var command = new NpgsqlCommand($"INSERT INTO question (question_title,question_text,question_image,submission_time, view_number,vote_number,downvote_number, message_number,userid) VALUES ('{title}','{text}','{image}','{DateTime.Now}',0,0,0,0,{userid})", conn);
                 
             command.ExecuteNonQuery();
             conn.Close();
@@ -330,14 +333,14 @@ namespace AskMate.Domain
 
 
 
-        public int AddAnswer(int questionID, string message, string image)
+        public int AddAnswer(int questionID, string message, string image, int userid)
         {
             int res;
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time, vote_number,downvote_number) VALUES ({questionID},'{message}','{image}','{DateTime.Now}',0,0) RETURNING answer_id", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer (question_id,answer_text,answer_image,submission_time, vote_number,downvote_number,userid) VALUES ({questionID},'{message}','{image}','{DateTime.Now}',0,0,{userid}) RETURNING answer_id", conn);
 
                
                 res = Convert.ToInt32(command.ExecuteScalar());
@@ -588,14 +591,14 @@ namespace AskMate.Domain
         }
 
 
-        public void AddCommentToQuestion(int questionID, string message)
+        public void AddCommentToQuestion(int questionID, string message, int userid)
         {
             using (var conn = new NpgsqlConnection(connectingString))
 
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO question_comment(question_id, comment_text, submission_time,edited_number) VALUES ({questionID},'{message}','{DateTime.Now}',0)", conn);
+                var command = new NpgsqlCommand($"INSERT INTO question_comment(question_id, comment_text, submission_time,edited_number, userid) VALUES ({questionID},'{message}','{DateTime.Now}',0,{userid})", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -618,13 +621,13 @@ namespace AskMate.Domain
         }
 
 
-        public void AddCommentToAnswer(int answerID, string message, int questionID = 0)
+        public void AddCommentToAnswer(int answerID, string message,  int userid, int questionID = 0)
         {
             using (var conn = new NpgsqlConnection(connectingString))
             {
                 conn.Open();
 
-                var command = new NpgsqlCommand($"INSERT INTO answer_comment(answer_id, comment_text, submission_time, edited_number) VALUES ({answerID},'{message}','{DateTime.Now}',0)", conn);
+                var command = new NpgsqlCommand($"INSERT INTO answer_comment(answer_id, comment_text, submission_time, edited_number,userid) VALUES ({answerID},'{message}','{DateTime.Now}',0,{userid})", conn);
 
                 command.ExecuteNonQuery();
             }
@@ -730,6 +733,24 @@ namespace AskMate.Domain
 
         }
 
+        public void AddQuestion(string title, string text, string image)
+        {
+            throw new NotImplementedException();
+        }
 
+        public int AddAnswer(int questionId, string message, string image)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddCommentToQuestion(int questionID, string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddCommentToAnswer(int answerID, string message, int questionID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

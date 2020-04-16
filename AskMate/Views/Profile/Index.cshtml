@@ -5,15 +5,28 @@
 
 
     <div class="text-center">
-        <h1 class="display-4">Profile</h1>
-        <h2>Id:</h2>
-        <p>@Model.Id</p>
+        <h1 class="display-4">Your Profile</h1>
         <h2>Email:</h2>
-        <p>@Model.Email</p>
+        <p>@Model.ToHiddenEmail(@Model.Email)</p>
         <br />
         <h2>Password:</h2>
-        <p>@Model.Password</p>
+        <p>@Model.ToHiddenPassword(@Model.Password)</p>
     </div>
+
+
+<ul>
+    @foreach (var q in Model.UserQuestions)
+    {
+        <li>
+           Title: @q.Title <br />
+           Question: @q.Text
+        </li>
+
+        <a href='@Url.Action("View","Home", new { id = q.ID })'>
+            View
+        </a>
+    }
+</ul>
 
 
 <ul class="circles" style="pointer-events:none; ">

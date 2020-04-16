@@ -42,6 +42,8 @@ namespace AskMate.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email)
+               
+
 
             };
 

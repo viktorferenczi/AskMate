@@ -20,8 +20,51 @@ namespace AskMate.Models
             Id = id;
             Email = email;
             Password = password;
+            UserQuestions = new List<QuestionModel>();
+            UserAnswers = new List<AnswerModel>();
+            UserQuestionComments = new List<Question_CommentModel>();
+            UserAnswerComments = new List<Answer_CommentModel>();
+
         }
 
         public UserModel() { }
+
+        public string ToHiddenPassword(string password)
+        {
+           string HiddenPassword = "";
+            foreach (var c in password)
+            {
+                HiddenPassword += "*";
+            }
+            return HiddenPassword;
+        }
+
+        public string ToHiddenEmail(string email)
+        {
+            bool isDomain = true;
+            string resultEmail = "";
+            for (int i = 0; i < email.Length; i++)
+            {
+                if (i == 0)
+                {
+                    resultEmail += email[i];
+                }
+                if (email[i] == '@')
+                {
+                    isDomain = false;
+                }
+                if (isDomain)
+                {
+                    resultEmail += '*';
+                }
+                else
+                {
+                    resultEmail += email[i];
+                }
+            }
+
+            return resultEmail;
+
+        }
     }
 }

@@ -20,6 +20,8 @@ namespace AskMate.Controllers
         private readonly IUserService _userService;
         private readonly InDataBaseService _DBService;
 
+        
+
         public ProfileController(ILogger<ProfileController> logger, DataBaseLoader DBloader, IUserService userService, InDataBaseService _DBService )
         {
             _logger = logger;
@@ -31,12 +33,27 @@ namespace AskMate.Controllers
        
         public IActionResult Index()
         {
+
+            var users = _DBService.GetAll();
+
             var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+            UserModel user = new UserModel();
+
+            foreach (var u in users)
+            {
+                if (u.Email == email)
+                {
+                    user = u;
+                }
+            }
+
+            
      
-            UserModel user = _DBService.GetOne(email);
+           
             if (user != null)
             {
-                return View(new UserModel(user.Id, user.Email, user.Password));
+                return View(user);
             }
             return RedirectToAction("Login", "Account");
         }
